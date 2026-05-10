@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Details</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+    <h2>Health Store</h2>
+    <div>
+        <a href="/products">Products</a>
+        <a href="/cart/">Cart</a>
+        <a href="/user/orders">Orders</a>
+        <a href="/user/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="content">
+    <h1>My Orders</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order No</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Booking Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order.order_no }}</td>
+                <td>₹{{ order.total_amount }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.booking_datetime }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

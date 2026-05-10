@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/item-master">Item Master</a>
+        <a href="/admin/item-list">Item List</a>
+        <a href="/admin/billing-summary">Billing Summary</a>
+        <a href="/admin/all-orders">All Orders</a>
+        <a href="/admin/logout">Logout</a>
+    </aside>
+
+    <main class="content">
+        <h1>Admin Dashboard</h1>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Total Items</h3>
+                <h2>{{ item_count }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>Total Users</h3>
+                <h2>{{ user_count }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>Total Orders</h3>
+                <h2>{{ order_count }}</h2>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

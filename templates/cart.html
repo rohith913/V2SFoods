@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<nav class="topbar">
+    <h2>Health Store</h2>
+    <div>
+        <a href="/products">Products</a>
+        <a href="/cart/">Cart</a>
+        <a href="/user/orders">Orders</a>
+        <a href="/user/logout">Logout</a>
+    </div>
+</nav>
+
+<div class="content">
+    <h1>My Cart</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for cart in cart_items %}
+            <tr>
+                <td>{{ cart.item.item_name }}</td>
+                <td>₹{{ cart.item.price }}</td>
+                <td>{{ cart.qty }}</td>
+                <td>₹{{ cart.item.price * cart.qty }}</td>
+                <td>
+                    <a href="/cart/remove/{{ cart.id }}" class="btn-small">
+                        Remove
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Total: ₹{{ total }}</h2>
+
+    <a href="/order/booking" class="btn-maroon">
+        Booking / Place Order
+    </a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Billing Summary</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/item-master">Item Master</a>
+        <a href="/admin/item-list">Item List</a>
+        <a href="/admin/billing-summary">Billing Summary</a>
+        <a href="/admin/all-orders">All Orders</a>
+        <a href="/admin/logout">Logout</a>
+    </aside>
+
+    <main class="content">
+        <h1>Billing Summary</h1>
+
+        <h2>Total Billing: ₹{{ total_amount }}</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Order No</th>
+                    <th>User</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.order_no }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>₹{{ order.total_amount }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.booking_datetime }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</div>
+
+</body>
+</html>

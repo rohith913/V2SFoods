@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Orders</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/item-master">Item Master</a>
+        <a href="/admin/item-list">Item List</a>
+        <a href="/admin/billing-summary">Billing Summary</a>
+        <a href="/admin/all-orders">All Orders</a>
+        <a href="/admin/logout">Logout</a>
+    </aside>
+
+    <main class="content">
+        <h1>All Users Order Detail Master</h1>
+
+        {% for order in orders %}
+        <div class="order-box">
+            <h3>{{ order.order_no }}</h3>
+            <p>User: {{ order.user.username }}</p>
+            <p>Total: ₹{{ order.total_amount }}</p>
+            <p>Status: {{ order.status }}</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for detail in order.details %}
+                    <tr>
+                        <td>{{ detail.item.item_name }}</td>
+                        <td>{{ detail.qty }}</td>
+                        <td>₹{{ detail.price }}</td>
+                        <td>₹{{ detail.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </main>
+</div>
+
+</body>
+</html>

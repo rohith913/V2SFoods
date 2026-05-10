@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Item Master</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/item-master">Item Master</a>
+        <a href="/admin/item-list">Item List</a>
+        <a href="/admin/billing-summary">Billing Summary</a>
+        <a href="/admin/all-orders">All Orders</a>
+        <a href="/admin/logout">Logout</a>
+    </aside>
+
+    <main class="content">
+        <h1>Item Master</h1>
+
+        <form method="post" class="form-card">
+            <label>Item Code</label>
+            <input type="text" name="item_code" required>
+
+            <label>Item Name</label>
+            <input type="text" name="item_name" required>
+
+            <label>Description</label>
+            <textarea name="description" required></textarea>
+
+            <label>Category</label>
+            <input type="text" name="category" required>
+
+            <label>Price</label>
+            <input type="number" step="0.01" name="price" required>
+
+            <label>Stock Qty</label>
+            <input type="number" name="stock_qty" required>
+
+            <label>Image URL</label>
+            <input type="text" name="image_url">
+
+            <label>Status</label>
+            <select name="status">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+            </select>
+
+            <button type="submit" class="btn-maroon">Save Item</button>
+        </form>
+    </main>
+</div>
+
+</body>
+</html>

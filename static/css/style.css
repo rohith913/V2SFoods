@@ -1,0 +1,274 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #ffffff;
+    color: #1c1c1c;
+}
+
+a {
+    text-decoration: none;
+}
+
+.login-wrapper {
+    min-height: 100vh;
+    background: linear-gradient(90deg, #ffffff 50%, #800020 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 380px;
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+.login-card h2 {
+    color: #800020;
+    margin-bottom: 10px;
+}
+
+.login-card input,
+.form-card input,
+.form-card textarea,
+.form-card select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.login-card textarea,
+.form-card textarea {
+    min-height: 90px;
+}
+
+.btn-maroon {
+    display: inline-block;
+    background: #800020;
+    color: #ffffff;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-maroon:hover {
+    background: #5e0017;
+}
+
+.btn-small {
+    background: #800020;
+    color: #ffffff;
+    padding: 7px 12px;
+    border-radius: 6px;
+}
+
+.error {
+    color: red;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #800020;
+    color: #ffffff;
+    padding: 25px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: #ffffff;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.sidebar a:hover {
+    background: #ffffff;
+    color: #800020;
+}
+
+.content {
+    flex: 1;
+    padding: 35px;
+}
+
+.content h1 {
+    color: #800020;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.card {
+    background: #fff5f7;
+    border-left: 6px solid #800020;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+    color: #800020;
+}
+
+.form-card {
+    background: #fff5f7;
+    padding: 25px;
+    border-radius: 14px;
+    max-width: 600px;
+}
+
+.form-card label {
+    font-weight: bold;
+    color: #800020;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+th {
+    background: #800020;
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eeeeee;
+}
+
+tr:hover {
+    background: #fff5f7;
+}
+
+.topbar {
+    background: #800020;
+    color: #ffffff;
+    padding: 18px 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.topbar a {
+    color: #ffffff;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.product-card {
+    background: #ffffff;
+    border: 1px solid #f0d6dc;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.product-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f5f5f5;
+}
+
+.product-card h3 {
+    color: #800020;
+}
+
+.product-card p {
+    min-height: 55px;
+    color: #555;
+}
+
+.order-box {
+    background: #fff5f7;
+    border-left: 5px solid #800020;
+    padding: 20px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+}
+
+.btn-maroon-outline {
+    display: inline-block;
+    background: #ffffff;
+    color: #800020;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: 2px solid #800020;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+}
+
+.btn-maroon-outline:hover {
+    background: #800020;
+    color: #ffffff;
+}
+
+@media(max-width: 900px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .login-wrapper {
+        background: #ffffff;
+    }
+}
+
+@media(max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
