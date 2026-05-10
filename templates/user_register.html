@@ -8,7 +8,11 @@
 
 <div class="login-wrapper">
     <div class="login-card">
-        <h2>User Register</h2>
+        <div class="login-brand">
+            <span class="brand-label">V2S Foods</span>
+            <h2>User Register</h2>
+            <p class="brand-subtitle">Join the V2S Foods community and start ordering healthful products.</p>
+        </div>
 
         {% if error %}
         <p class="error">{{ error }}</p>
@@ -23,7 +27,7 @@
             <button type="submit" class="btn-maroon">Register</button>
         </form>
 
-        <p>
+        <p class="login-note">
             Already registered?
             <a href="/user/login">Login</a>
         </p>

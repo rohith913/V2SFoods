@@ -8,7 +8,11 @@
 
 <div class="login-wrapper">
     <div class="login-card">
-        <h2>Admin Login</h2>
+        <div class="login-brand">
+            <span class="brand-label">Admin Portal</span>
+            <h2>Admin Login</h2>
+            <p class="brand-subtitle">Access the dashboard to manage products, orders, and customers.</p>
+        </div>
 
         {% if error %}
         <p class="error">{{ error }}</p>
@@ -21,7 +25,7 @@
             <button type="submit" class="btn-maroon">Login</button>
         </form>
 
-        <p>
+        <p class="login-note">
             New admin?
             <a href="/admin/register">Register</a>
         </p>

@@ -1,46 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Order Details</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-<nav class="topbar">
-    <h2>Health Store</h2>
-    <div>
-        <a href="/products">Products</a>
-        <a href="/cart/">Cart</a>
-        <a href="/user/orders">Orders</a>
-        <a href="/user/logout">Logout</a>
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+        <h1 class="page-title">My Orders</h1>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order No</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.order_no }}</td>
+                        <td>₹{{ order.total_amount }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>{{ order.booking_datetime }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</nav>
+</section>
 
-<div class="content">
-    <h1>My Orders</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Order No</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Booking Date</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td>{{ order.order_no }}</td>
-                <td>₹{{ order.total_amount }}</td>
-                <td>{{ order.status }}</td>
-                <td>{{ order.booking_datetime }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-</body>
-</html>
+{% endblock %}

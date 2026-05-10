@@ -35,13 +35,27 @@ class ItemMaster(Base):
     __tablename__ = "item_master"
 
     id = Column(Integer, primary_key=True, index=True)
+
     item_code = Column(String(100), unique=True)
     item_name = Column(String(300))
     description = Column(Text)
     category = Column(String(200))
+
+    ingredients = Column(Text)
+    how_to_use = Column(Text)
+    specifications = Column(Text)
+
     price = Column(Numeric(10, 2))
     stock_qty = Column(Integer, default=0)
-    image_url = Column(Text)
+
+    main_image = Column(Text)
+    image_1 = Column(Text)
+    image_2 = Column(Text)
+    image_3 = Column(Text)
+    image_4 = Column(Text)
+    image_5 = Column(Text)
+    video_url = Column(Text)
+
     status = Column(String(50), default="ACTIVE")
     created_datetime = Column(DateTime, default=datetime.utcnow)
 

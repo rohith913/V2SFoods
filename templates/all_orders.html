@@ -1,57 +1,83 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>All Orders</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-<div class="layout">
-    <aside class="sidebar">
-        <h2>Admin</h2>
-        <a href="/admin/dashboard">Dashboard</a>
-        <a href="/admin/item-master">Item Master</a>
-        <a href="/admin/item-list">Item List</a>
-        <a href="/admin/billing-summary">Billing Summary</a>
-        <a href="/admin/all-orders">All Orders</a>
-        <a href="/admin/logout">Logout</a>
-    </aside>
+{% block content %}
 
-    <main class="content">
-        <h1>All Users Order Detail Master</h1>
+<section class="page-section">
+    <div class="container">
+
+        <div class="section-head">
+            <div>
+                <small>Admin Orders</small>
+                <h2>All Users Order Detail Master</h2>
+            </div>
+        </div>
 
         {% for order in orders %}
         <div class="order-box">
-            <h3>{{ order.order_no }}</h3>
-            <p>User: {{ order.user.username }}</p>
-            <p>Total: ₹{{ order.total_amount }}</p>
-            <p>Status: {{ order.status }}</p>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
+            <div class="order-header">
+                <div>
+                    <h3>Order No: {{ order.order_no }}</h3>
+                    <p>
+                        User:
+                        <strong>{{ order.user.username if order.user else '-' }}</strong>
+                    </p>
+                    <p>
+                        Email:
+                        <strong>{{ order.user.email if order.user else '-' }}</strong>
+                    </p>
+                </div>
 
-                <tbody>
-                    {% for detail in order.details %}
-                    <tr>
-                        <td>{{ detail.item.item_name }}</td>
-                        <td>{{ detail.qty }}</td>
-                        <td>₹{{ detail.price }}</td>
-                        <td>₹{{ detail.amount }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <div class="order-summary-right">
+                    <span class="status-badge">{{ order.status }}</span>
+                    <h2>₹{{ order.total_amount }}</h2>
+                    <p>{{ order.booking_datetime }}</p>
+                </div>
+            </div>
+
+            <div class="table-card order-inner-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for detail in order.details %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ detail.item.item_name if detail.item else '-' }}</td>
+                            <td>{{ detail.item.category if detail.item else '-' }}</td>
+                            <td>{{ detail.qty }}</td>
+                            <td>₹{{ detail.price }}</td>
+                            <td>₹{{ detail.amount }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align:center;">
+                                No order items found
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        {% else %}
+        <div class="empty-card">
+            <h3>No orders found</h3>
+            <p>Once users book products, orders will appear here.</p>
         </div>
         {% endfor %}
-    </main>
-</div>
 
-</body>
-</html>
+    </div>
+</section>
+
+{% endblock %}

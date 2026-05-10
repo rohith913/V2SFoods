@@ -1,52 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Billing Summary</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-<div class="layout">
-    <aside class="sidebar">
-        <h2>Admin</h2>
-        <a href="/admin/dashboard">Dashboard</a>
-        <a href="/admin/item-master">Item Master</a>
-        <a href="/admin/item-list">Item List</a>
-        <a href="/admin/billing-summary">Billing Summary</a>
-        <a href="/admin/all-orders">All Orders</a>
-        <a href="/admin/logout">Logout</a>
-    </aside>
+{% block content %}
 
-    <main class="content">
-        <h1>Billing Summary</h1>
+<section class="page-section">
+    <div class="container">
 
-        <h2>Total Billing: ₹{{ total_amount }}</h2>
+        <div class="section-head">
+            <div>
+                <small>Admin Billing</small>
+                <h2>Billing Summary</h2>
+            </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Order No</th>
-                    <th>User</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
+            <div class="summary-total-card">
+                <span>Total Billing</span>
+                <h2>₹{{ total_amount }}</h2>
+            </div>
+        </div>
 
-            <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.order_no }}</td>
-                    <td>{{ order.user.username }}</td>
-                    <td>₹{{ order.total_amount }}</td>
-                    <td>{{ order.status }}</td>
-                    <td>{{ order.booking_datetime }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </main>
-</div>
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Order No</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
 
-</body>
-</html>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ order.order_no }}</td>
+                        <td>{{ order.user.username if order.user else '-' }}</td>
+                        <td>{{ order.user.email if order.user else '-' }}</td>
+                        <td>₹{{ order.total_amount }}</td>
+                        <td>
+                            <span class="status-badge">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td>{{ order.booking_datetime }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align:center;">
+                            No billing records found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

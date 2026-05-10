@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
+{% extends "base.html" %}
 
-<div class="layout">
-    <aside class="sidebar">
-        <h2>Admin</h2>
-        <a href="/admin/dashboard">Dashboard</a>
-        <a href="/admin/item-master">Item Master</a>
-        <a href="/admin/item-list">Item List</a>
-        <a href="/admin/billing-summary">Billing Summary</a>
-        <a href="/admin/all-orders">All Orders</a>
-        <a href="/admin/logout">Logout</a>
-    </aside>
+{% block content %}
 
-    <main class="content">
-        <h1>Admin Dashboard</h1>
+<section class="page-section">
+    <div class="container">
+        <h1 class="page-title">Admin Dashboard</h1>
 
         <div class="cards">
             <div class="card">
@@ -36,8 +22,7 @@
                 <h2>{{ order_count }}</h2>
             </div>
         </div>
-    </main>
-</div>
+    </div>
+</section>
 
-</body>
-</html>
+{% endblock %}
