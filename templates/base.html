@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "V2S Health" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <!-- <div class="topbar">
+    <div class="container topbar-inner">
+        <div>📞 +91 9966988888</div>
+
+        <div class="top-links">
+            {% if request.session.get("admin_id") %}
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/logout">Logout</a>
+            {% elif request.session.get("user_id") %}
+                <a href="/user/orders">My Orders</a>
+                <a href="/user/logout">Logout</a>
+            {% else %}
+                <a href="/admin/login">Admin Login</a>
+                <a href="/user/login">User Login</a>
+            {% endif %}
+        </div>
+    </div>
+</div> -->
+
+    <header class="header">
+        <div class="container nav-wrap">
+            <a href="/" class="logo">The V2S <span>Food</span></a>
+
+            <nav class="nav">
+                {% if request.session.get("admin_id") %}
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/item-master">Item Master</a>
+                <a href="/admin/billing-summary">Billing Summary</a>
+                <a href="/admin/all-orders">All Orders</a>
+                {% elif request.session.get("user_id") %}
+                <a href="/products">Home</a>
+                <a href="/products">All Products</a>
+                <a href="/cart/">Cart</a>
+                <a href="/user/orders">Orders</a>
+                {% else %}
+                <a href="/">Home</a>
+                <a href="/admin/login">Admin</a>
+                <a href="/user/login">User</a>
+                {% endif %}
+            </nav>
+
+            <div class="nav-actions">
+                {% if request.session.get("user_id") %}
+                <a href="/cart/" class="icon-btn">🛒</a>
+                <a href="/user/logout" class="logout-btn">Logout</a>
+                {% elif request.session.get("admin_id") %}
+                <a href="/admin/logout" class="logout-btn">Logout</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="container">
+            <div class="logo footer-logo">The V2S <span>Health</span></div>
+            <p>
+                Natural wellness products, millet mixes, health food, and daily nutrition products.
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+
+    {% block script %}{% endblock %}
+
+</body>
+
+</html>

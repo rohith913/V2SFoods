@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="section-head">
+            <div>
+                <small>Admin Billing</small>
+                <h2>Billing Summary</h2>
+            </div>
+
+            <div class="summary-total-card">
+                <span>Total Billing</span>
+                <h2>₹{{ total_amount }}</h2>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Order No</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Booking Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ order.order_no }}</td>
+                        <td>{{ order.user.username if order.user else '-' }}</td>
+                        <td>{{ order.user.email if order.user else '-' }}</td>
+                        <td>₹{{ order.total_amount }}</td>
+                        <td>
+                            <span class="status-badge">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td>{{ order.booking_datetime }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align:center;">
+                            No billing records found
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

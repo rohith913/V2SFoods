@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container hero-grid">
+        <div>
+            <div class="hero-tag">Natural Wellness Store</div>
+            <h1>Healthy products for your everyday nutrition</h1>
+            <p>
+                Explore millet mixes, flours, herbal powders, seeds, and wellness products made for
+                healthy families and daily nutrition.
+            </p>
+
+            <div class="hero-pills">
+                <span>Millet Products</span>
+                <span>No Preservatives</span>
+                <span>Natural Ingredients</span>
+                <span>Family Wellness</span>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <h3>Why choose V2S Health?</h3>
+            <p>
+                Clean ingredients, traditional nutrition, and health-focused food products in one place.
+            </p>
+            <div class="hero-pills">
+                <span>Fresh Stock</span>
+                <span>Fast Booking</span>
+                <span>Easy Cart</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="container">
+    <div class="section-head">
+        <div>
+            <small>Shop Products</small>
+            <h2>Our Product List</h2>
+        </div>
+
+        <input type="text" class="search-box" id="productSearch" placeholder="Search products...">
+    </div>
+
+    <div class="product-grid" id="productGrid">
+        {% for item in items %}
+        <div class="product-card"
+             data-name="{{ item.item_name | lower }}"
+             data-category="{{ item.category | lower }}">
+
+            <div class="product-img-wrap"
+                 onclick="openProductModal('productModal{{ item.id }}')"
+                 style="cursor:pointer;">
+                <span class="product-badge">{{ item.status }}</span>
+
+                {% if item.main_image %}
+                    <img src="{{ item.main_image }}" alt="{{ item.item_name }}">
+                {% else %}
+                    <div style="font-size:58px;">🌿</div>
+                {% endif %}
+            </div>
+
+            <div class="product-body">
+                <div class="category">{{ item.category }}</div>
+
+                <h3 onclick="openProductModal('productModal{{ item.id }}')" style="cursor:pointer;">
+                    {{ item.item_name }}
+                </h3>
+
+                <p>{{ item.description }}</p>
+
+                <div class="price-row">
+                    <div class="price">₹{{ item.price }}</div>
+                    <div class="stock">Stock: {{ item.stock_qty }}</div>
+                </div>
+
+                <div class="btn-row">
+                    <a href="/cart/add/{{ item.id }}" class="btn-primary">
+                        Add to Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Product Details Modal -->
+        <div class="product-detail-overlay" id="productModal{{ item.id }}">
+            <div class="product-detail-modal">
+
+                <button type="button" class="product-modal-close"
+                        onclick="closeProductModal('productModal{{ item.id }}')">
+                    ×
+                </button>
+
+                <div class="product-detail-grid">
+
+                    <!-- LEFT SIDE MEDIA -->
+                    <div class="product-media-box">
+
+                        <div class="product-main-media" id="mainMediaBox{{ item.id }}">
+                            {% if item.main_image %}
+                                <img src="{{ item.main_image }}" id="mainMedia{{ item.id }}" alt="{{ item.item_name }}">
+                            {% else %}
+                                <div class="no-product-image">🌿</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-thumb-list">
+
+                            {% if item.main_image %}
+                            <div class="product-thumb active"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.main_image }}', 'image', this)">
+                                <img src="{{ item.main_image }}">
+                            </div>
+                            {% endif %}
+
+                            {% if item.image_1 %}
+                            <div class="product-thumb"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.image_1 }}', 'image', this)">
+                                <img src="{{ item.image_1 }}">
+                            </div>
+                            {% endif %}
+
+                            {% if item.image_2 %}
+                            <div class="product-thumb"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.image_2 }}', 'image', this)">
+                                <img src="{{ item.image_2 }}">
+                            </div>
+                            {% endif %}
+
+                            {% if item.image_3 %}
+                            <div class="product-thumb"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.image_3 }}', 'image', this)">
+                                <img src="{{ item.image_3 }}">
+                            </div>
+                            {% endif %}
+
+                            {% if item.image_4 %}
+                            <div class="product-thumb"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.image_4 }}', 'image', this)">
+                                <img src="{{ item.image_4 }}">
+                            </div>
+                            {% endif %}
+
+                            {% if item.image_5 %}
+                            <div class="product-thumb"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.image_5 }}', 'image', this)">
+                                <img src="{{ item.image_5 }}">
+                            </div>
+                            {% endif %}
+
+                            {% if item.video_url %}
+                            <div class="product-thumb video-thumb"
+                                 onclick="changeProductMedia('{{ item.id }}', '{{ item.video_url }}', 'video', this)">
+                                ▶
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+
+                    <!-- RIGHT SIDE DETAILS -->
+                    <div class="product-detail-info">
+
+                        <div class="modal-category">{{ item.category }}</div>
+
+                        <h2>{{ item.item_name }}</h2>
+
+                        <div class="modal-price-row">
+                            <div class="modal-price">₹{{ item.price }}</div>
+                            <span class="status-badge">{{ item.status }}</span>
+                        </div>
+
+                        <p class="modal-short-desc">
+                            {{ item.description }}
+                        </p>
+
+                        <div class="modal-stock-row">
+                            <span>Available Stock</span>
+                            <strong>{{ item.stock_qty }}</strong>
+                        </div>
+
+                        <a href="/cart/add/{{ item.id }}" class="btn-primary modal-cart-btn">
+                            Add to Cart
+                        </a>
+
+                        <div class="detail-tabs">
+                            <button type="button"
+                                    class="detail-tab-btn active"
+                                    onclick="openDetailTab('{{ item.id }}', 'desc', this)">
+                                Description
+                            </button>
+
+                            <button type="button"
+                                    class="detail-tab-btn"
+                                    onclick="openDetailTab('{{ item.id }}', 'ingredients', this)">
+                                Ingredients
+                            </button>
+
+                            <button type="button"
+                                    class="detail-tab-btn"
+                                    onclick="openDetailTab('{{ item.id }}', 'use', this)">
+                                How to Use
+                            </button>
+
+                            <button type="button"
+                                    class="detail-tab-btn"
+                                    onclick="openDetailTab('{{ item.id }}', 'specs', this)">
+                                Specifications
+                            </button>
+                        </div>
+
+                        <div class="detail-tab-content active" id="desc{{ item.id }}">
+                            <h4>Description</h4>
+                            <p>{{ item.description or 'No description available.' }}</p>
+                        </div>
+
+                        <div class="detail-tab-content" id="ingredients{{ item.id }}">
+                            <h4>Ingredients</h4>
+                            <p>{{ item.ingredients or 'No ingredients added.' }}</p>
+                        </div>
+
+                        <div class="detail-tab-content" id="use{{ item.id }}">
+                            <h4>How to Use</h4>
+                            <p>{{ item.how_to_use or 'No usage instructions added.' }}</p>
+                        </div>
+
+                        <div class="detail-tab-content" id="specs{{ item.id }}">
+                            <h4>Specifications</h4>
+                            <p>{{ item.specifications or 'No specifications added.' }}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+    const searchInput = document.getElementById("productSearch");
+    const productCards = document.querySelectorAll(".product-card");
+
+    if (searchInput) {
+        searchInput.addEventListener("keyup", function () {
+            const value = this.value.toLowerCase();
+
+            productCards.forEach(card => {
+                const name = card.dataset.name || "";
+                const category = card.dataset.category || "";
+
+                if (name.includes(value) || category.includes(value)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    }
+
+    function openProductModal(modalId) {
+        document.getElementById(modalId).classList.add("show");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeProductModal(modalId) {
+        document.getElementById(modalId).classList.remove("show");
+        document.body.style.overflow = "auto";
+    }
+
+    function changeProductMedia(itemId, mediaUrl, mediaType, clickedThumb) {
+        const mainBox = document.getElementById("mainMediaBox" + itemId);
+
+        if (mediaType === "video") {
+            mainBox.innerHTML = `
+                <video controls autoplay style="width:100%; height:100%; object-fit:contain; border-radius:20px;">
+                    <source src="${mediaUrl}">
+                    Your browser does not support video.
+                </video>
+            `;
+        } else {
+            mainBox.innerHTML = `
+                <img src="${mediaUrl}" alt="Product image">
+            `;
+        }
+
+        const thumbParent = clickedThumb.parentElement;
+        const thumbs = thumbParent.querySelectorAll(".product-thumb");
+
+        thumbs.forEach(thumb => {
+            thumb.classList.remove("active");
+        });
+
+        clickedThumb.classList.add("active");
+    }
+
+    function openDetailTab(itemId, tabName, clickedButton) {
+        const modal = clickedButton.closest(".product-detail-info");
+
+        const contents = modal.querySelectorAll(".detail-tab-content");
+        contents.forEach(content => {
+            content.classList.remove("active");
+        });
+
+        const buttons = modal.querySelectorAll(".detail-tab-btn");
+        buttons.forEach(button => {
+            button.classList.remove("active");
+        });
+
+        document.getElementById(tabName + itemId).classList.add("active");
+        clickedButton.classList.add("active");
+    }
+
+    window.addEventListener("click", function (event) {
+        const modals = document.querySelectorAll(".product-detail-overlay");
+
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.classList.remove("show");
+                document.body.style.overflow = "auto";
+            }
+        });
+    });
+</script>
+{% endblock %}

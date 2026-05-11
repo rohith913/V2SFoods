@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+        <h1 class="page-title">My Cart</h1>
+
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Amount</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for cart in cart_items %}
+                    <tr>
+                        <td>{{ cart.item.item_name }}</td>
+                        <td>₹{{ cart.item.price }}</td>
+                        <td>{{ cart.qty }}</td>
+                        <td>₹{{ cart.item.price * cart.qty }}</td>
+                        <td>
+                            <a href="/cart/remove/{{ cart.id }}" class="btn-outline">
+                                Remove
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Total: ₹{{ total }}</h2>
+
+        <a href="/order/booking" class="btn-primary">
+            Booking / Place Order
+        </a>
+    </div>
+</section>
+
+{% endblock %}

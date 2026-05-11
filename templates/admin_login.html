@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="login-brand">
+            <span class="brand-label">Admin Portal</span>
+            <h2>Admin Login</h2>
+            <p class="brand-subtitle">Access the dashboard to manage products, orders, and customers.</p>
+        </div>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post">
+            <input type="email" name="email" placeholder="Admin Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit" class="btn-maroon">Login</button>
+        </form>
+
+        <p class="login-note">
+            New admin?
+            <a href="/admin/register">Register</a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

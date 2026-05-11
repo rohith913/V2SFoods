@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+        <h1 class="page-title">Admin Dashboard</h1>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Total Items</h3>
+                <h2>{{ item_count }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>Total Users</h3>
+                <h2>{{ user_count }}</h2>
+            </div>
+
+            <div class="card">
+                <h3>Total Orders</h3>
+                <h2>{{ order_count }}</h2>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
