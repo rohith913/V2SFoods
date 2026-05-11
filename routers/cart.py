@@ -58,7 +58,7 @@ def add_to_cart(
     item = db.query(ItemMaster).filter(
         ItemMaster.id == item_id,
         ItemMaster.status == "ACTIVE"
-    ).first()
+    ).first()       
 
     if not item:
         return RedirectResponse("/products", status_code=302)
