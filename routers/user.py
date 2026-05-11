@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-
+from urllib.parse import quote
 from database import get_db
 from models import UserMaster, OrderMaster
 
@@ -62,19 +62,31 @@ def user_register(
 
 
 @router.get("/login")
-def user_login_page(request: Request):
+def user_login_page(request: Request, next: str = "/products"):
     return templates.TemplateResponse(
         request=request,
         name="user_login.html",
-        context={}
+        context={
+            "next": next
+        }
     )
 
+@router.get("/login")
+def user_login_page(request: Request, next: str = "/products"):
+    return templates.TemplateResponse(
+        request=request,
+        name="user_login.html",
+        context={
+            "next": next
+        }
+    )
 
 @router.post("/login")
 def user_login(
     request: Request,
     email: str = Form(...),
     password: str = Form(...),
+    next: str = Form("/products"),
     db: Session = Depends(get_db)
 ):
     user = db.query(UserMaster).filter(
@@ -82,29 +94,43 @@ def user_login(
         UserMaster.status == "ACTIVE"
     ).first()
 
+    if not user:
+        return templates.TemplateResponse(
+            request=request,
+            name="user_login.html",
+            context={
+                "error": "Invalid email or password",
+                "next": next
+            }
+        )
+
     if password != user.password:
         return templates.TemplateResponse(
             request=request,
             name="user_login.html",
             context={
-                "error": "Invalid email or password"
+                "error": "Invalid email or password",
+                "next": next
             }
         )
-
-
 
     request.session["user_id"] = user.id
     request.session["user_email"] = user.email
     request.session["username"] = user.username
     request.session["role"] = "USER"
 
-    return RedirectResponse("/products", status_code=302)
+    if not next or not next.startswith("/"):
+        next = "/products"
 
-
+    return RedirectResponse(next, status_code=302)
 @router.get("/orders")
 def user_orders(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("user_id"):
-        return RedirectResponse("/user/login")
+        next_url = quote(str(request.url.path))
+        return RedirectResponse(
+            f"/user/login?next={next_url}",
+            status_code=302
+        )
 
     orders = db.query(OrderMaster).filter(
         OrderMaster.user_id == request.session.get("user_id")
@@ -122,4 +148,4 @@ def user_orders(request: Request, db: Session = Depends(get_db)):
 @router.get("/logout")
 def user_logout(request: Request):
     request.session.clear()
-    return RedirectResponse("/user/login")
+    return RedirectResponse("/products", status_code=302)

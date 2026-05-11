@@ -14,8 +14,8 @@
 </head>
 
 <body>
-
-    <!-- <div class="topbar">
+    <!-- 
+<div class="topbar">
     <div class="container topbar-inner">
         <div>📞 +91 9966988888</div>
 
@@ -27,8 +27,8 @@
                 <a href="/user/orders">My Orders</a>
                 <a href="/user/logout">Logout</a>
             {% else %}
-                <a href="/admin/login">Admin Login</a>
-                <a href="/user/login">User Login</a>
+                <a href="/user/login">Sign in</a>
+                <a href="/products">Products</a>
             {% endif %}
         </div>
     </div>
@@ -36,7 +36,7 @@
 
     <header class="header">
         <div class="container nav-wrap">
-            <a href="/" class="logo">The V2S <span>Food</span></a>
+            <a href="/products" class="logo">V2S <span>Foods</span></a>
 
             <nav class="nav">
                 {% if request.session.get("admin_id") %}
@@ -44,15 +44,11 @@
                 <a href="/admin/item-master">Item Master</a>
                 <a href="/admin/billing-summary">Billing Summary</a>
                 <a href="/admin/all-orders">All Orders</a>
-                {% elif request.session.get("user_id") %}
+                {% else %}
                 <a href="/products">Home</a>
                 <a href="/products">All Products</a>
                 <a href="/cart/">Cart</a>
                 <a href="/user/orders">Orders</a>
-                {% else %}
-                <a href="/">Home</a>
-                <a href="/admin/login">Admin</a>
-                <a href="/user/login">User</a>
                 {% endif %}
             </nav>
 
@@ -62,11 +58,13 @@
                 <a href="/user/logout" class="logout-btn">Logout</a>
                 {% elif request.session.get("admin_id") %}
                 <a href="/admin/logout" class="logout-btn">Logout</a>
+                {% else %}
+                <a href="/cart/" class="icon-btn">🛒</a>
+                <a href="/user/login" class="logout-btn">Login</a>
                 {% endif %}
             </div>
         </div>
     </header>
-
     {% block content %}{% endblock %}
 
     <footer class="footer">

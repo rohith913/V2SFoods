@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -29,9 +30,5 @@ app.include_router(order.router)
 
 
 @app.get("/")
-def home(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="login_selection.html",
-        context={}
-    )
+def home():
+    return RedirectResponse("/products", status_code=302)

@@ -197,9 +197,6 @@ def admin_item_list_redirect():
 
 @router.get("/products")
 def product_list(request: Request, db: Session = Depends(get_db)):
-    if not request.session.get("user_id"):
-        return RedirectResponse("/user/login")
-
     items = db.query(ItemMaster).filter(
         ItemMaster.status == "ACTIVE"
     ).order_by(ItemMaster.id.desc()).all()

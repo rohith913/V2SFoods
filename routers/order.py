@@ -2,11 +2,20 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from datetime import datetime
+from urllib.parse import quote
 
 from database import get_db
 from models import CartMaster, OrderMaster, OrderDetail
 
 router = APIRouter(prefix="/order", tags=["Order"])
+
+
+def redirect_to_user_login(request: Request):
+    next_url = quote(str(request.url.path))
+    return RedirectResponse(
+        f"/user/login?next={next_url}",
+        status_code=302
+    )
 
 
 @router.get("/booking")
@@ -15,8 +24,7 @@ def booking_order(
     db: Session = Depends(get_db)
 ):
     if not request.session.get("user_id"):
-        return RedirectResponse("/user/login")
-
+        return redirect_to_user_login(request)
     user_id = request.session.get("user_id")
 
     cart_items = db.query(CartMaster).filter(
@@ -24,7 +32,7 @@ def booking_order(
     ).all()
 
     if not cart_items:
-        return RedirectResponse("/cart/")
+        return RedirectResponse("/cart/", status_code=302)
 
     total_amount = 0
 

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
+from urllib.parse import quote
 
 from database import get_db
 from models import CartMaster, ItemMaster
@@ -11,10 +12,18 @@ router = APIRouter(prefix="/cart", tags=["Cart"])
 templates = Jinja2Templates(directory="templates")
 
 
+def redirect_to_user_login(request: Request):
+    next_url = quote(str(request.url.path))
+    return RedirectResponse(
+        f"/user/login?next={next_url}",
+        status_code=302
+    )
+
+
 @router.get("/")
 def cart_page(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("user_id"):
-        return RedirectResponse("/user/login")
+        return redirect_to_user_login(request)
 
     cart_items = db.query(CartMaster).filter(
         CartMaster.user_id == request.session.get("user_id")
@@ -42,7 +51,7 @@ def add_to_cart(
     db: Session = Depends(get_db)
 ):
     if not request.session.get("user_id"):
-        return RedirectResponse("/user/login")
+        return redirect_to_user_login(request)
 
     user_id = request.session.get("user_id")
 
@@ -52,7 +61,7 @@ def add_to_cart(
     ).first()
 
     if not item:
-        return RedirectResponse("/products")
+        return RedirectResponse("/products", status_code=302)
 
     existing_cart = db.query(CartMaster).filter(
         CartMaster.user_id == user_id,
@@ -71,7 +80,7 @@ def add_to_cart(
 
     db.commit()
 
-    return RedirectResponse("/cart/")
+    return RedirectResponse("/cart/", status_code=302)
 
 
 @router.get("/remove/{cart_id}")
@@ -81,7 +90,7 @@ def remove_cart(
     db: Session = Depends(get_db)
 ):
     if not request.session.get("user_id"):
-        return RedirectResponse("/user/login")
+        return redirect_to_user_login(request)
 
     cart = db.query(CartMaster).filter(
         CartMaster.id == cart_id,
@@ -92,4 +101,4 @@ def remove_cart(
         db.delete(cart)
         db.commit()
 
-    return RedirectResponse("/cart/")
+    return RedirectResponse("/cart/", status_code=302)
