@@ -19,8 +19,35 @@
 
 body {
     margin: 0;
-    background: var(--cream);
     color: var(--text-dark);
+    background-color: #f8f4ee;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("/static/images/food-bg.png");
+    background-repeat: repeat;
+    background-size: 700px auto;
+    opacity: 0.70;
+    z-index: -1;
+}
+
+.header,
+.login-card,
+.card,
+.form-card,
+.table-card,
+.product-card,
+.hero-card,
+.order-box,
+.search-card,
+.empty-card,
+.modal-box,
+.product-detail-modal {
+    background: rgba(255, 255, 255, 0.96);
 }
 
 a {
@@ -390,7 +417,8 @@ tr:hover {
 
 /* Product List */
 .hero {
-    background: linear-gradient(135deg, var(--olive-light), var(--white));
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(2px);
     padding: 50px 0;
     border-bottom: 1px solid var(--border);
 }

@@ -14,26 +14,7 @@
 </head>
 
 <body>
-    <!-- 
-<div class="topbar">
-    <div class="container topbar-inner">
-        <div>📞 +91 9966988888</div>
-
-        <div class="top-links">
-            {% if request.session.get("admin_id") %}
-                <a href="/admin/dashboard">Dashboard</a>
-                <a href="/admin/logout">Logout</a>
-            {% elif request.session.get("user_id") %}
-                <a href="/user/orders">My Orders</a>
-                <a href="/user/logout">Logout</a>
-            {% else %}
-                <a href="/user/login">Sign in</a>
-                <a href="/products">Products</a>
-            {% endif %}
-        </div>
-    </div>
-</div> -->
-
+  
     <header class="header">
         <div class="container nav-wrap">
             <a href="/products" class="logo">V2S <span>Foods</span></a>
@@ -65,15 +46,11 @@
             </div>
         </div>
     </header>
-<<<<<<< HEAD
-=======
-
->>>>>>> 5569038e261caf9713b836bc73bc8b707bc3f918
     {% block content %}{% endblock %}
 
     <footer class="footer">
         <div class="container">
-            <div class="logo footer-logo">The V2S <span>Health</span></div>
+            <div class="logo footer-logo">V2S <span>Foods</span></div>
             <p>
                 Natural wellness products, millet mixes, health food, and daily nutrition products.
             </p>
