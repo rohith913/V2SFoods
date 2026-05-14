@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Recipes Hero -->
+<div class="recipes-hero">
+  <div class="container">
+    <div style="font-size:40px;margin-bottom:16px;">🍲</div>
+    <h1>Healthy Recipe Blog</h1>
+    <p>Delicious, nutritious recipes using our millet mixes & health products</p>
+  </div>
+</div>
+
+<main class="container">
+  <!-- Filter Buttons -->
+  <div class="recipe-filters">
+    <button class="filter-btn active" onclick="filterRecipes('all', this)">All Recipes</button>
+    <button class="filter-btn" onclick="filterRecipes('millet', this)">Millet</button>
+    <button class="filter-btn" onclick="filterRecipes('breakfast', this)">Breakfast</button>
+    <button class="filter-btn" onclick="filterRecipes('snacks', this)">Snacks</button>
+    <button class="filter-btn" onclick="filterRecipes('drinks', this)">Health Drinks</button>
+    <button class="filter-btn" onclick="filterRecipes('kids', this)">Kids Special</button>
+  </div>
+
+  <!-- Recipe Grid -->
+  <div class="recipe-grid" id="recipeGrid">
+
+    <div class="recipe-card" data-cat="millet breakfast">
+      <div class="recipe-img">🥣
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 20 min</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-category">Millet · Breakfast</div>
+        <h3>Ragi Malt Porridge</h3>
+        <p>A warm, creamy ragi porridge packed with calcium and iron – perfect for mornings.</p>
+        <div class="recipe-meta">
+          <span><i class="fas fa-user"></i> 2 servings</span>
+          <span><i class="fas fa-fire"></i> Easy</span>
+        </div>
+        <a href="/recipes/ragi-malt" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+      </div>
+    </div>
+
+    <div class="recipe-card" data-cat="snacks millet">
+      <div class="recipe-img">🍪
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 35 min</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-category">Snacks · Millet</div>
+        <h3>Millet Ladoo (Kambu Urundai)</h3>
+        <p>Traditional pearl millet sweet balls with jaggery and coconut – a healthy treat.</p>
+        <div class="recipe-meta">
+          <span><i class="fas fa-user"></i> 12 pieces</span>
+          <span><i class="fas fa-fire"></i> Medium</span>
+        </div>
+        <a href="/recipes/millet-ladoo" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+      </div>
+    </div>
+
+    <div class="recipe-card" data-cat="drinks breakfast">
+      <div class="recipe-img">🥤
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 10 min</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-category">Health Drinks · Breakfast</div>
+        <h3>Health Mix Energy Drink</h3>
+        <p>Blend our health mix with milk or water for a quick, nutrition-packed energy booster.</p>
+        <div class="recipe-meta">
+          <span><i class="fas fa-user"></i> 1 serving</span>
+          <span><i class="fas fa-fire"></i> Very Easy</span>
+        </div>
+        <a href="/recipes/health-mix-drink" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+      </div>
+    </div>
+
+    <div class="recipe-card" data-cat="kids breakfast millet">
+      <div class="recipe-img">🥞
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 25 min</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-category">Kids Special · Breakfast</div>
+        <h3>Millet Pancakes</h3>
+        <p>Fluffy, golden millet pancakes that kids love – healthy and filling for school days.</p>
+        <div class="recipe-meta">
+          <span><i class="fas fa-user"></i> 4 servings</span>
+          <span><i class="fas fa-fire"></i> Easy</span>
+        </div>
+        <a href="/recipes/millet-pancakes" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+      </div>
+    </div>
+
+    <div class="recipe-card" data-cat="snacks">
+      <div class="recipe-img">🥗
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 15 min</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-category">Snacks</div>
+        <h3>Sprouted Mung Dal Salad</h3>
+        <p>A refreshing and protein-rich salad with sprouted lentils, veggies, and lemon dressing.</p>
+        <div class="recipe-meta">
+          <span><i class="fas fa-user"></i> 2 servings</span>
+          <span><i class="fas fa-fire"></i> Easy</span>
+        </div>
+        <a href="/recipes/mung-salad" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+      </div>
+    </div>
+
+    <div class="recipe-card" data-cat="drinks kids">
+      <div class="recipe-img">🍵
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 10 min</div>
+      </div>
+      <div class="recipe-body">
+        <div class="recipe-category">Drinks · Kids</div>
+        <h3>Herbal Tulsi Ginger Tea</h3>
+        <p>A soothing herbal tea with tulsi and ginger – natural immunity booster for all ages.</p>
+        <div class="recipe-meta">
+          <span><i class="fas fa-user"></i> 2 cups</span>
+          <span><i class="fas fa-fire"></i> Very Easy</span>
+        </div>
+        <a href="/recipes/tulsi-tea" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CTA Banner -->
+  <div style="background:linear-gradient(135deg,var(--olive-dark),var(--olive-main));border-radius:24px;padding:40px;display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:60px;flex-wrap:wrap;">
+    <div>
+      <h3 style="color:white;margin:0 0 8px;font-size:24px;">Try These Recipes?</h3>
+      <p style="color:rgba(255,255,255,0.82);margin:0;font-size:15px;">Get the ingredients from our store and start cooking today!</p>
+    </div>
+    <a href="/products" class="btn-primary" style="background:white;color:var(--olive-dark);white-space:nowrap;">
+      <i class="fas fa-shopping-bag"></i> Shop Ingredients
+    </a>
+  </div>
+</main>
+{% endblock %}
+
+{% block script %}
+<script>
+function filterRecipes(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.recipe-card').forEach(card => {
+        if (cat === 'all' || card.dataset.cat.includes(cat)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

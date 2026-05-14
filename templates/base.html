@@ -1,66 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>{{ title or "V2S Health" }}</title>
+    <title>{{ title or "V2S Foods – Natural Wellness Store" }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-
 <body>
-  
     <header class="header">
         <div class="container nav-wrap">
             <a href="/products" class="logo">V2S <span>Foods</span></a>
-
             <nav class="nav">
                 {% if request.session.get("admin_id") %}
                 <a href="/admin/dashboard">Dashboard</a>
                 <a href="/admin/item-master">Item Master</a>
-                <a href="/admin/billing-summary">Billing Summary</a>
+                <a href="/admin/billing-summary">Billing</a>
                 <a href="/admin/all-orders">All Orders</a>
                 {% else %}
                 <a href="/products">Home</a>
-                <a href="/products">All Products</a>
-                <a href="/cart/">Cart</a>
-                <a href="/user/orders">Orders</a>
+                <a href="/products">Shop</a>
+                <a href="/recipes">Recipes</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
                 {% endif %}
             </nav>
-
             <div class="nav-actions">
                 {% if request.session.get("user_id") %}
-                <a href="/cart/" class="icon-btn">🛒</a>
+                <a href="/cart/" class="icon-btn cart-btn" title="Cart"><i class="fas fa-shopping-basket"></i></a>
+                <a href="/user/orders" class="icon-btn" title="Orders"><i class="fas fa-box"></i></a>
                 <a href="/user/logout" class="logout-btn">Logout</a>
                 {% elif request.session.get("admin_id") %}
                 <a href="/admin/logout" class="logout-btn">Logout</a>
                 {% else %}
-                <a href="/cart/" class="icon-btn">🛒</a>
-                <a href="/user/login" class="logout-btn">Login</a>
+                <a href="/cart/" class="icon-btn cart-btn"><i class="fas fa-shopping-basket"></i></a>
+                <a href="/user/login" class="logout-btn"><i class="fas fa-user"></i> Login</a>
                 {% endif %}
+                <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+                    <span></span><span></span><span></span>
+                </button>
             </div>
         </div>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="/products">Home</a>
+            <a href="/products">Shop</a>
+            <a href="/recipes">Recipes</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            {% if not request.session.get("user_id") %}
+            <a href="/user/login" class="mobile-login-btn">Login / Register</a>
+            {% endif %}
+        </div>
     </header>
+
     {% block content %}{% endblock %}
 
     <footer class="footer">
-        <div class="container">
-            <div class="logo footer-logo">V2S <span>Foods</span></div>
-            <p>
-                Natural wellness products, millet mixes, health food, and daily nutrition products.
-            </p>
+        <div class="footer-top">
+            <div class="container footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">V2S <span>Foods</span></div>
+                    <!-- <p class="footer-tagline">Nourishing families with traditional, preservative-free health foods since 2018.</p> -->
+                    <div class="footer-social">
+                        <!-- <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a> -->
+                        <a href="https://instagram.com/v2s_millexa" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <!-- <a href="#" class="social-link"><i class="fab fa-youtube"></i></a> -->
+                        <a href="https://wa.me/917305330100" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> All Products</a></li>
+                        <li><a href="/recipes"><i class="fas fa-chevron-right"></i> Recipe Blog</a></li>
+                        <li><a href="/about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="/cart/"><i class="fas fa-chevron-right"></i> My Cart</a></li>
+                        <li><a href="/user/orders"><i class="fas fa-chevron-right"></i> My Orders</a></li>
+                        <li><a href="/contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <!-- <h4 class="footer-heading">Categories</h4>
+                    <ul class="footer-links">
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> Millet Products</a></li>
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> Health Mixes</a></li>
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> Herbal Powders</a></li>
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> Flours & Grains</a></li>
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> Seeds & Nuts</a></li>
+                        <li><a href="/products"><i class="fas fa-chevron-right"></i> Daily Nutrition</a></li>
+                    </ul> -->
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Get In Touch</h4>
+                    <div class="footer-contact-list">
+                        <div class="footer-contact-item">
+                                    <a href="https://www.google.com/maps/search/?api=1&query=V2S+Foods+Virudhunagar+626002+Tamil+Nadu+India" target="_blank">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Manufactured and marketed by: V2S Foods Virudhunagar-626002 Tamil Nadu, India</span>
+                                    </a>
+                        </div> 
+                        <div class="footer-contact-item"><i class="fas fa-phone-alt"></i><span> <a href="tel:+917305330100">+91 7305330100</a><br> <a href="tel:+917305340100"> +91 7305340100</a></span></div>                      
+
+                        <div class="footer-contact-item">
+                            <a href="mailto:v2s.millexa@gmail.com">
+                                <i class="fas fa-envelope"></i>
+                                <span>v2s.millexa@gmail.com</span>
+                            </a>
+                        </div>
+                        <div class="footer-contact-item"><i class="fas fa-clock"></i><span>Mon–Sat: 9:00 AM – 7:00 PM</span></div>
+                    </div>
+                    <div class="footer-newsletter">
+                        <p>Get recipes &amp; offers in your inbox</p>
+                        <div class="newsletter-form">
+                            <input type="email" placeholder="Your email address">
+                            <button><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-trust">
+            <div class="container footer-trust-inner">
+                <div class="trust-badge"><i class="fas fa-leaf"></i><span>100% Natural</span></div>
+                <div class="trust-badge"><i class="fas fa-ban"></i><span>No Preservatives</span></div>
+                <div class="trust-badge"><i class="fas fa-shield-alt"></i><span>Safe &amp; Certified</span></div>
+                <div class="trust-badge"><i class="fas fa-truck"></i><span>Pan India Delivery</span></div>
+                <!-- <div class="trust-badge"><i class="fas fa-undo"></i><span>Easy Returns</span></div> -->
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-inner">
+                <p>© 2025 V2S Foods. All rights reserved. Made with <i class="fas fa-heart" style="color:#f5f5f5;"></i> in Virudhunagar.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms &amp; Conditions</a>
+                    <a href="#">Shipping Policy</a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="/static/js/script.js"></script>
-
     {% block script %}{% endblock %}
-
+    <script>
+        function toggleMobileMenu() {
+            const nav = document.getElementById('mobileNav');
+            const btn = document.getElementById('hamburger');
+            nav.classList.toggle('open');
+            btn.classList.toggle('active');
+        }
+    </script>
 </body>
-
 </html>

@@ -1,35 +1,60 @@
 {% extends "base.html" %}
-
 {% block content %}
-
 <section class="page-section">
-    <div class="container">
-        <h1 class="page-title">My Orders</h1>
+  <div class="container">
+    <h1 class="page-title">My Orders</h1>
 
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Order No</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Booking Date</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for order in orders %}
-                    <tr>
-                        <td>{{ order.order_no }}</td>
-                        <td>₹{{ order.total_amount }}</td>
-                        <td>{{ order.status }}</td>
-                        <td>{{ order.booking_datetime }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    {% if orders %}
+      {% for order in orders %}
+      <div class="order-box">
+        <div class="order-header">
+          <div>
+            <h3>{{ order.order_no }}</h3>
+            <p><i class="fas fa-calendar" style="color:var(--olive-main);"></i> Placed on: {{ order.booking_datetime.strftime('%d %b %Y, %I:%M %p') if order.booking_datetime else 'N/A' }}</p>
+            <p><i class="fas fa-box" style="color:var(--olive-main);"></i> {{ order.details|length }} item(s)</p>
+          </div>
+          <div class="order-summary-right">
+            <span class="status-badge {% if order.status == 'PAID' %}paid{% elif order.status == 'BOOKED' %}pending{% endif %}">
+              {{ order.status }}
+            </span>
+            <h2>₹{{ order.total_amount }}</h2>
+            <p>Total Amount</p>
+          </div>
         </div>
-    </div>
+        <div class="table-card order-inner-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for detail in order.details %}
+              <tr>
+                <td>{{ detail.item.item_name }}</td>
+                <td>₹{{ detail.price }}</td>
+                <td>{{ detail.qty }}</td>
+                <td>₹{{ detail.amount }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-card" style="margin-top:20px;">
+        <div style="font-size:60px;margin-bottom:16px;">📦</div>
+        <h3>No orders yet</h3>
+        <p>Start shopping and your orders will appear here.</p>
+        <a href="/products" class="btn-primary" style="display:inline-flex;margin-top:10px;">
+          <i class="fas fa-shopping-bag"></i> Shop Now
+        </a>
+      </div>
+    {% endif %}
+  </div>
 </section>
-
 {% endblock %}
