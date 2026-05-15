@@ -77,8 +77,8 @@ a { text-decoration: none; }
     justify-content: space-between;
     gap: 20px;
 }
-.logo { font-size: 26px; font-weight: 800; color: var(--olive-dark); white-space: nowrap; }
-.logo span { color: var(--olive-main); }
+.logo { font-size: 26px; font-weight: 800; color: #8B0000; white-space: nowrap; }
+.logo span { color: #9b0303; }
 .nav { display: flex; gap: 22px; align-items: center; }
 .nav a { color: var(--text-dark); font-weight: 500; font-size: 15px; position: relative; padding-bottom: 2px; }
 .nav a::after {

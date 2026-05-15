@@ -3,7 +3,7 @@
 <section class="page-section">
   <div class="container">
     <div style="text-align:center;margin-bottom:10px;">
-      <small style="color:var(--olive-main);font-weight:700;text-transform:uppercase;letter-spacing:1px;">We Love to Hear From You</small>
+      <small style="color:var(--olive-main);font-weight:700;text-transform:uppercase;letter-spacing:1px;">We'd Love to Hear From You</small>
       <h1 class="page-title" style="margin-top:8px;">Contact Us</h1>
     </div>
 
@@ -12,7 +12,6 @@
       <div class="contact-info-box">
         <h2>Get In Touch</h2>
         <p>Have a question about our products, orders, or recipes? We're here to help.</p>
-
         <div class="contact-detail">
           <i class="fas fa-map-marker-alt"></i>
           <div class="contact-detail-text">
@@ -31,7 +30,7 @@
           <i class="fas fa-envelope"></i>
           <div class="contact-detail-text">
             <strong>Email Us</strong>
-            <span>v2s.millexa@gmail.com<br></span>
+            <span>v2s.millexa@gmail.com</span>
           </div>
         </div>
         <div class="contact-detail">
@@ -41,7 +40,6 @@
             <span>Monday – Saturday: 9 AM – 7 PM<br>Sunday: 10 AM – 3 PM</span>
           </div>
         </div>
-
         <div style="margin-top:28px;">
           <strong style="display:block;margin-bottom:12px;font-size:14px;">Follow Us</strong>
           <div style="display:flex;gap:10px;">
@@ -56,12 +54,18 @@
       <!-- Contact Form -->
       <div class="contact-form-box">
         <h2>Send a Message</h2>
+
         {% if success %}
-        <div style="background:#d4edda;color:#155724;padding:14px;border-radius:12px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
-          <i class="fas fa-check-circle"></i> Thank you! We'll get back to you within 24 hours.
+        <div style="background:#d4edda;color:#155724;padding:18px;border-radius:14px;margin-bottom:22px;display:flex;align-items:flex-start;gap:12px;border:1px solid #c3e6cb;">
+          <i class="fas fa-check-circle" style="font-size:20px;margin-top:1px;flex-shrink:0;"></i>
+          <div>
+            <strong>Message Sent Successfully!</strong><br>
+            <span style="font-size:14px;">Thank you{% if submitted_name %}, {{ submitted_name }}{% endif %}! Your message has been delivered to our team at v2s.millexa@gmail.com. We'll get back to you within 24 hours.</span>
+          </div>
         </div>
         {% endif %}
-        <form method="POST" action="/contact">
+
+        <form method="POST" action="/contact" id="contactForm">
           <div class="form-group">
             <label>Full Name *</label>
             <input type="text" name="name" placeholder="Your name" required>
@@ -91,12 +95,26 @@
             <label>Message *</label>
             <textarea name="message" rows="5" placeholder="Tell us how we can help..." required></textarea>
           </div>
-          <button type="submit" class="btn-primary" style="width:100%;">
+          <button type="submit" class="btn-primary" style="width:100%;" id="submitBtn">
             <i class="fas fa-paper-plane"></i> Send Message
           </button>
+          <p style="color:var(--text-muted);font-size:12px;margin-top:12px;text-align:center;">
+            <i class="fas fa-lock" style="color:var(--olive-main);"></i>
+            Your message is sent directly to v2s.millexa@gmail.com
+          </p>
         </form>
       </div>
     </div>
   </div>
 </section>
+{% endblock %}
+
+{% block script %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    btn.disabled = true;
+});
+</script>
 {% endblock %}

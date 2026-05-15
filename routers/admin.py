@@ -163,3 +163,20 @@ def all_orders(request: Request, db: Session = Depends(get_db)):
 def admin_logout(request: Request):
     request.session.clear()
     return RedirectResponse("/admin/login")
+
+@router.post("/update-order-status/{order_id}")
+async def update_order_status(
+    order_id: int,
+    request: Request,
+    db: Session = Depends(get_db)
+):
+    from models import OrderMaster
+    if not request.session.get("admin_id"):
+        return RedirectResponse("/admin/login", status_code=302)
+    form = await request.form()
+    new_status = form.get("status", "BOOKED")
+    order = db.query(OrderMaster).filter(OrderMaster.id == order_id).first()
+    if order:
+        order.status = new_status
+        db.commit()
+    return RedirectResponse("/admin/all-orders", status_code=302)

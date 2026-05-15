@@ -6,7 +6,7 @@ from datetime import datetime
 from urllib.parse import quote
 
 from database import get_db
-from models import CartMaster, OrderMaster, OrderDetail
+from models import CartMaster, OrderMaster, OrderDetail, UserMaster
 
 router = APIRouter(prefix="/order", tags=["Order"])
 templates = Jinja2Templates(directory="templates")
@@ -25,10 +25,15 @@ def checkout_page(request: Request, db: Session = Depends(get_db)):
     cart_items = db.query(CartMaster).filter(CartMaster.user_id == user_id).all()
     if not cart_items:
         return RedirectResponse("/cart/", status_code=302)
+
+    user = db.query(UserMaster).filter(UserMaster.id == user_id).first()
     total = sum(float(c.item.price) * c.qty for c in cart_items)
+
     return templates.TemplateResponse(request=request, name="checkout.html", context={
         "cart_items": cart_items,
         "total": total,
+        "user_name": user.username if user else "",
+        "user_mobile": user.mobile if user else "",
     })
 
 
@@ -40,6 +45,12 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
 
     form = await request.form()
     payment_method = form.get("payment_method", "cod")
+    full_name  = form.get("full_name", "")
+    mobile     = form.get("mobile", "")
+    address    = form.get("address", "")
+    city       = form.get("city", "")
+    state      = form.get("state", "Tamil Nadu")
+    pincode    = form.get("pincode", "")
 
     cart_items = db.query(CartMaster).filter(CartMaster.user_id == user_id).all()
     if not cart_items:
@@ -52,7 +63,14 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
         order_no=order_no,
         user_id=user_id,
         total_amount=total_amount,
-        status="BOOKED"
+        status="BOOKED",
+        cust_name=full_name,
+        cust_mobile=mobile,
+        cust_address=address,
+        cust_city=city,
+        cust_state=state,
+        cust_pincode=pincode,
+        payment_method=payment_method.upper().replace("_", " ")
     )
     db.add(order)
     db.commit()
@@ -80,7 +98,6 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
     })
 
 
-# Legacy booking route (redirect to checkout)
 @router.get("/booking")
 def booking_order(request: Request):
     if not request.session.get("user_id"):
