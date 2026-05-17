@@ -9,7 +9,8 @@
         <h2>All Orders</h2>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <span style="background:var(--olive-light);padding:8px 16px;border-radius:20px;font-size:14px;font-weight:600;color:var(--olive-dark);">
+        <span
+          style="background:var(--olive-light);padding:8px 16px;border-radius:20px;font-size:14px;font-weight:600;color:var(--olive-dark);">
           Total: {{ orders|length }} orders
         </span>
       </div>
@@ -23,7 +24,8 @@
         <div>
           <h3 style="display:flex;align-items:center;gap:10px;">
             {{ order.order_no }}
-            <span class="status-badge {% if order.status == 'DELIVERED' %}delivered{% elif order.status == 'CANCELLED' %}cancelled{% else %}pending{% endif %}">
+            <span
+              class="status-badge {% if order.status == 'DELIVERED' %}delivered{% elif order.status == 'CANCELLED' %}cancelled{% else %}pending{% endif %}">
               {{ order.status }}
             </span>
           </h3>
@@ -75,7 +77,8 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
         <!-- Customer Details -->
         <div style="background:var(--olive-soft);border:1px solid var(--border);border-radius:16px;padding:18px;">
-          <div style="color:var(--olive-main);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
+          <div
+            style="color:var(--olive-main);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
             <i class="fas fa-user"></i> Customer Details
           </div>
           <div style="display:flex;flex-direction:column;gap:8px;">
@@ -96,7 +99,8 @@
 
         <!-- Delivery Address -->
         <div style="background:var(--olive-soft);border:1px solid var(--border);border-radius:16px;padding:18px;">
-          <div style="color:var(--olive-main);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
+          <div
+            style="color:var(--olive-main);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">
             <i class="fas fa-map-marker-alt"></i> Delivery Address
           </div>
           {% if order.cust_address %}
@@ -117,6 +121,7 @@
       </div>
 
       <!-- ORDER ITEMS TABLE -->
+      <!-- ORDER ITEMS TABLE -->
       <div class="table-card order-inner-table">
         <table>
           <thead>
@@ -124,33 +129,65 @@
               <th>#</th>
               <th>Item Name</th>
               <th>Category</th>
+              <th>Weight</th>
               <th>Qty</th>
-              <th>Price</th>
+              <th>Price / KG</th>
               <th>Amount</th>
             </tr>
           </thead>
+
           <tbody>
             {% for detail in order.details %}
             <tr>
               <td>{{ loop.index }}</td>
+
               <td>
                 <div style="display:flex;align-items:center;gap:10px;">
                   {% if detail.item and detail.item.main_image %}
-                  <img src="{{ detail.item.main_image }}" style="width:38px;height:38px;border-radius:8px;object-fit:cover;">
+                  <img src="{{ detail.item.main_image }}"
+                    style="width:38px;height:38px;border-radius:8px;object-fit:cover;">
                   {% else %}
-                  <div style="width:38px;height:38px;border-radius:8px;background:var(--olive-soft);display:flex;align-items:center;justify-content:center;font-size:18px;">🌿</div>
+                  <div
+                    style="width:38px;height:38px;border-radius:8px;background:var(--olive-soft);display:flex;align-items:center;justify-content:center;font-size:18px;">
+                    🌿</div>
                   {% endif %}
                   <strong>{{ detail.item.item_name if detail.item else '—' }}</strong>
                 </div>
               </td>
-              <td><span style="background:var(--olive-light);padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600;color:var(--olive-dark);">{{ detail.item.category if detail.item else '—' }}</span></td>
-              <td><strong>{{ detail.qty }}</strong></td>
-              <td>₹{{ detail.price }}</td>
-              <td><strong style="color:var(--olive-main);">₹{{ detail.amount }}</strong></td>
+
+              <td>
+                <span
+                  style="background:var(--olive-light);padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600;color:var(--olive-dark);">
+                  {{ detail.item.category if detail.item else '—' }}
+                </span>
+              </td>
+
+              <td>
+                <strong>
+                  {{ "%.1f"|format((detail.selected_kg or 0.5)|float) }} kg
+                </strong>
+              </td>
+
+              <td>
+                <strong>{{ detail.qty }}</strong>
+              </td>
+
+              <td>
+                ₹{{ "%.2f"|format(detail.price|float) }}
+              </td>
+
+              <td>
+                <strong style="color:var(--olive-main);">
+                  ₹{{ "%.2f"|format(detail.amount|float) }}
+                </strong>
+              </td>
             </tr>
+
             {% else %}
             <tr>
-              <td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px;">No items found</td>
+              <td colspan="7" style="text-align:center;color:var(--text-muted);padding:20px;">
+                No items found
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -170,13 +207,33 @@
 </section>
 
 <style>
-.status-badge.delivered { background:#d4edda; color:#155724; }
-.status-badge.cancelled { background:#f8d7da; color:#721c24; }
-.status-badge.pending   { background:#fff3cd; color:#856404; }
-@media(max-width:700px) {
-  .order-header { flex-direction:column; }
-  .order-summary-right { text-align:left; }
-  [style*="grid-template-columns:1fr 1fr"] { grid-template-columns:1fr !important; }
-}
+  .status-badge.delivered {
+    background: #d4edda;
+    color: #155724;
+  }
+
+  .status-badge.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  .status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  @media(max-width:700px) {
+    .order-header {
+      flex-direction: column;
+    }
+
+    .order-summary-right {
+      text-align: left;
+    }
+
+    [style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
 </style>
 {% endblock %}

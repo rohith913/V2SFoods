@@ -87,6 +87,7 @@ class OrderMaster(Base):
 
 class OrderDetail(Base):
     __tablename__ = "order_detail"
+
     id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey("order_master.id"))
     item_id = Column(Integer, ForeignKey("item_master.id"))
@@ -95,6 +96,7 @@ class OrderDetail(Base):
     amount = Column(Numeric(10, 2))
     order = relationship("OrderMaster", back_populates="details")
     item = relationship("ItemMaster")
+    selected_kg = Column(Numeric(5, 2), default=0.5)
 
 
 class RecipeLike(Base):

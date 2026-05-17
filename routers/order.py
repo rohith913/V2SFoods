@@ -96,13 +96,21 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
     db.refresh(order)
 
     for cart in cart_items:
+        price = Decimal(str(cart.item.price or 0))
+        selected_kg = Decimal(str(cart.selected_kg or 0.5))
+        qty = Decimal(str(cart.qty or 1))
+
+        amount = price * selected_kg * qty
+
         detail = OrderDetail(
             order_id=order.id,
             item_id=cart.item_id,
-            qty=cart.qty,
-            price=cart.item.price,
-            amount=float(cart.item.price) * cart.qty
+            qty=int(qty),
+            selected_kg=selected_kg,
+            price=price,
+            amount=amount
         )
+
         db.add(detail)
 
     for cart in cart_items:
