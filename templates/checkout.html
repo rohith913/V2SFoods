@@ -4,8 +4,8 @@
   <div class="container">
     <!-- Breadcrumb -->
     <div style="margin-bottom:24px;color:var(--text-muted);font-size:14px;">
-      <a href="/products" style="color:var(--olive-main);">Home</a> › 
-      <a href="/cart/" style="color:var(--olive-main);">Cart</a> › 
+      <a href="/products" style="color:var(--olive-main);">Home</a> ›
+      <a href="/cart/" style="color:var(--olive-main);">Cart</a> ›
       <span>Checkout</span>
     </div>
 
@@ -76,9 +76,11 @@
               </div>
               <div class="upi-form" id="upiForm">
                 <label class="form-group" style="display:block;">
-                  <span style="font-weight:600;color:var(--olive-dark);font-size:14px;display:block;margin-bottom:6px;">UPI ID</span>
+                  <span
+                    style="font-weight:600;color:var(--olive-dark);font-size:14px;display:block;margin-bottom:6px;">UPI
+                    ID</span>
                   <input type="text" name="upi_id" placeholder="yourname@upi" style="margin:0;">
-                </span>
+                  </span>
                 </label>
               </div>
 
@@ -169,9 +171,16 @@
         </div>
 
         <!-- RIGHT: Order Summary -->
+        <!-- RIGHT: Order Summary -->
         <div class="order-summary-sticky">
           <h3>Order Summary</h3>
+
           {% for cart in cart_items %}
+
+          {% set selected_kg = cart.selected_kg or 0.5 %}
+          {% set qty = cart.qty or 1 %}
+          {% set amount = cart.item.price * selected_kg * qty %}
+
           <div class="order-item-row">
             <div class="order-item-img">
               {% if cart.item.main_image %}
@@ -180,18 +189,41 @@
               🌿
               {% endif %}
             </div>
+
             <div class="order-item-info">
               <strong>{{ cart.item.item_name }}</strong>
-              <small>Qty: {{ cart.qty }}</small>
+
+              <small>
+                {{ "%.1f"|format(selected_kg|float) }}kg × {{ qty }} qty
+              </small>
+
+              <small>
+                ₹{{ "%.2f"|format(cart.item.price|float) }} per kg
+              </small>
             </div>
-            <div class="order-item-price">₹{{ cart.item.price * cart.qty }}</div>
+
+            <div class="order-item-price">
+              ₹{{ "%.2f"|format(amount|float) }}
+            </div>
           </div>
+
           {% endfor %}
 
           <div style="margin-top:18px;">
-            <div class="summary-row"><span>Subtotal</span><span>₹{{ total }}</span></div>
-            <div class="summary-row"><span>Shipping</span><span style="color:var(--olive-main);font-weight:600;">FREE</span></div>
-            <div class="summary-row total"><span>Total</span><span>₹{{ total }}</span></div>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span>₹{{ "%.2f"|format(total|float) }}</span>
+            </div>
+
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span style="color:var(--olive-main);font-weight:600;">FREE</span>
+            </div>
+
+            <div class="summary-row total">
+              <span>Total</span>
+              <span>₹{{ "%.2f"|format(total|float) }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -202,7 +234,7 @@
 
 {% block script %}
 <script>
-function selectPayment(type, element) {
+  function selectPayment(type, element) {
     // Mark option selected
     document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
     element.classList.add('selected');
@@ -213,35 +245,35 @@ function selectPayment(type, element) {
     if (type === 'upi') document.getElementById('upiForm').classList.add('show');
     if (type === 'card') document.getElementById('cardForm').classList.add('show');
     if (type === 'netbanking') document.getElementById('netbankingForm').classList.add('show');
-}
+  }
 
-// Format card number
-const cardNum = document.querySelector('[name="card_number"]');
-if (cardNum) {
-    cardNum.addEventListener('input', function() {
-        let val = this.value.replace(/\D/g, '').substring(0, 16);
-        this.value = val.replace(/(.{4})/g, '$1 ').trim();
+  // Format card number
+  const cardNum = document.querySelector('[name="card_number"]');
+  if (cardNum) {
+    cardNum.addEventListener('input', function () {
+      let val = this.value.replace(/\D/g, '').substring(0, 16);
+      this.value = val.replace(/(.{4})/g, '$1 ').trim();
     });
-}
+  }
 
-// Format expiry
-const expiry = document.querySelector('[name="card_expiry"]');
-if (expiry) {
-    expiry.addEventListener('input', function() {
-        let val = this.value.replace(/\D/g, '').substring(0, 4);
-        if (val.length >= 2) val = val.substring(0,2) + ' / ' + val.substring(2);
-        this.value = val;
+  // Format expiry
+  const expiry = document.querySelector('[name="card_expiry"]');
+  if (expiry) {
+    expiry.addEventListener('input', function () {
+      let val = this.value.replace(/\D/g, '').substring(0, 4);
+      if (val.length >= 2) val = val.substring(0, 2) + ' / ' + val.substring(2);
+      this.value = val;
     });
-}
+  }
 
-// Default select COD
-document.querySelector('.payment-option:last-of-type').classList.add('selected');
+  // Default select COD
+  document.querySelector('.payment-option:last-of-type').classList.add('selected');
 
-// Submit loading state
-document.getElementById('checkoutForm').addEventListener('submit', function() {
+  // Submit loading state
+  document.getElementById('checkoutForm').addEventListener('submit', function () {
     const btn = document.getElementById('placeOrderBtn');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     btn.disabled = true;
-});
+  });
 </script>
 {% endblock %}

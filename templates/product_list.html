@@ -73,7 +73,7 @@
 
                 <div class="price-row">
                     <div class="price">₹{{ item.price }}</div>
-                    <div class="stock">Stock: {{ item.stock_qty }}</div>
+                    
                 </div>
 
                 <div class="btn-row">
@@ -178,10 +178,7 @@
                             {{ item.description }}
                         </p>
 
-                        <div class="modal-stock-row">
-                            <span>Available Stock</span>
-                            <strong>{{ item.stock_qty }}</strong>
-                        </div>
+                       
 
                         <a href="/cart/add/{{ item.id }}" class="btn-primary modal-cart-btn">
                             Add to Cart

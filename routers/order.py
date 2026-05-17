@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from datetime import datetime
 from urllib.parse import quote
-
+from decimal import Decimal
 from database import get_db
 from models import CartMaster, OrderMaster, OrderDetail, UserMaster
 
@@ -21,20 +21,39 @@ def redirect_to_user_login(request: Request):
 def checkout_page(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("user_id"):
         return redirect_to_user_login(request)
+
     user_id = request.session.get("user_id")
-    cart_items = db.query(CartMaster).filter(CartMaster.user_id == user_id).all()
+
+    cart_items = db.query(CartMaster).filter(
+        CartMaster.user_id == user_id
+    ).all()
+
     if not cart_items:
         return RedirectResponse("/cart/", status_code=302)
 
-    user = db.query(UserMaster).filter(UserMaster.id == user_id).first()
-    total = sum(float(c.item.price) * c.qty for c in cart_items)
+    user = db.query(UserMaster).filter(
+        UserMaster.id == user_id
+    ).first()
 
-    return templates.TemplateResponse(request=request, name="checkout.html", context={
-        "cart_items": cart_items,
-        "total": total,
-        "user_name": user.username if user else "",
-        "user_mobile": user.mobile if user else "",
-    })
+    total = Decimal("0.00")
+
+    for cart in cart_items:
+        price = Decimal(str(cart.item.price or 0))
+        selected_kg = Decimal(str(cart.selected_kg or 0.5))
+        qty = Decimal(str(cart.qty or 1))
+
+        total += price * selected_kg * qty
+
+    return templates.TemplateResponse(
+        request=request,
+        name="checkout.html",
+        context={
+            "cart_items": cart_items,
+            "total": total,
+            "user_name": user.username if user else "",
+            "user_mobile": user.mobile if user else "",
+        }
+    )
 
 
 @router.post("/place")

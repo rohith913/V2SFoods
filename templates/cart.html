@@ -1,105 +1,206 @@
 {% extends "base.html" %}
+
 {% block content %}
+
 <section class="page-section">
   <div class="container">
-    <h1 class="page-title">🛒 My Cart</h1>
 
-    {% if cart_items %}
-    <div class="cart-layout">
-      <!-- Cart Items -->
+    <div class="cart-page-head">
       <div>
-        <div class="cart-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Amount</th>
-                <th>Remove</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for cart in cart_items %}
-              <tr>
-                <td>
-                  <div style="display:flex;align-items:center;gap:14px;">
-                    {% if cart.item.main_image %}
-                    <img src="{{ cart.item.main_image }}" style="width:56px;height:56px;object-fit:cover;border-radius:12px;border:1px solid var(--border);">
-                    {% else %}
-                    <div style="width:56px;height:56px;border-radius:12px;background:var(--olive-soft);display:flex;align-items:center;justify-content:center;font-size:26px;">🌿</div>
-                    {% endif %}
-                    <div>
-                      <strong style="color:var(--olive-dark);">{{ cart.item.item_name }}</strong><br>
-                      <small style="color:var(--text-muted);">{{ cart.item.category }}</small>
-                    </div>
-                  </div>
-                </td>
-                <td><strong style="color:var(--olive-dark);">₹{{ cart.item.price }}</strong></td>
-                <td>
-                  <div class="cart-qty-controls">
-                    <a href="/cart/decrease/{{ cart.id }}" class="qty-btn">−</a>
-                    <strong>{{ cart.qty }}</strong>
-                    <a href="/cart/increase/{{ cart.id }}" class="qty-btn">+</a>
-                  </div>
-                </td>
-                <td><strong style="color:var(--olive-main);font-size:16px;">₹{{ cart.item.price * cart.qty }}</strong></td>
-                <td>
-                  <a href="/cart/remove/{{ cart.id }}" class="btn-outline btn-sm" onclick="return confirm('Remove this item?')">
-                    <i class="fas fa-trash-alt"></i>
-                  </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-
-        <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;">
-          <a href="/products" class="btn-outline"><i class="fas fa-arrow-left"></i> Continue Shopping</a>
-        </div>
+        <small class="section-label">Shopping Cart</small>
+        <h1 class="page-title">My Cart</h1>
       </div>
 
-      <!-- Summary Box -->
-      <div class="cart-summary-box">
-        <h3>Order Summary</h3>
-        <div class="summary-row"><span>Subtotal</span><span>₹{{ total }}</span></div>
-        <div class="summary-row"><span>Delivery</span><span style="color:var(--olive-main);font-weight:600;">FREE</span></div>
-        <div class="summary-row"><span>Tax (0%)</span><span>₹0</span></div>
-        <div class="summary-row total"><span>Total</span><span>₹{{ total }}</span></div>
+      <a href="/products" class="btn-outline">
+        <i class="fas fa-arrow-left"></i> Continue Shopping
+      </a>
+    </div>
 
-        <div class="coupon-row">
-          <input type="text" placeholder="Coupon code">
-          <button>Apply</button>
+    {% if cart_items %}
+
+    <div class="new-cart-layout">
+
+      <div class="cart-products-list">
+
+        {% for cart in cart_items %}
+
+        {% set selected_kg = cart.selected_kg or 0.5 %}
+        {% set qty = cart.qty or 1 %}
+        {% set amount = cart.item.price * selected_kg * qty %}
+
+        <div class="cart-product-card">
+
+          <div class="cart-product-image">
+            {% if cart.item.main_image %}
+            <img src="{{ cart.item.main_image }}" alt="{{ cart.item.item_name }}">
+            {% else %}
+            <div class="cart-no-img">🌿</div>
+            {% endif %}
+          </div>
+
+          <div class="cart-product-content">
+
+            <div class="cart-product-top">
+              <div>
+                <h3>{{ cart.item.item_name }}</h3>
+                <p>{{ cart.item.category }}</p>
+              </div>
+
+              <a href="/cart/remove/{{ cart.id }}" class="cart-remove-btn"
+                onclick="return confirm('Remove this item?')">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+            </div>
+
+            <div class="cart-price-info">
+              <span>Price Per KG</span>
+              <strong>₹{{ "%.2f"|format(cart.item.price|float) }}</strong>
+            </div>
+
+            <div class="kg-section">
+              <label>Select Weight</label>
+
+              <div class="kg-options">
+
+                <a href="/cart/kg/{{ cart.id }}/0.5" class="kg-box {% if selected_kg == 0.5 %}active{% endif %}">
+                  0.5kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/1" class="kg-box {% if selected_kg == 1 %}active{% endif %}">
+                  1kg
+                </a>
+
+
+                <button type="button" style="display: none;" class="kg-box more-kg-btn"
+                  onclick="toggleMoreKg('moreKg{{ cart.id }}')">
+                  More
+                </button>
+
+              </div>
+
+              <div class="kg-options more-kg-options" id="moreKg{{ cart.id }}">
+                <a href="/cart/kg/{{ cart.id }}/1.5" class="kg-box {% if selected_kg == 1.5 %}active{% endif %}">
+                  1.5kg
+                </a>
+
+
+                <a href="/cart/kg/{{ cart.id }}/2" class="kg-box {% if selected_kg == 2 %}active{% endif %}">
+                  2kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/2.5" class="kg-box {% if selected_kg == 2.5 %}active{% endif %}">
+                  2.5kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/3" class="kg-box {% if selected_kg == 3 %}active{% endif %}">
+                  3kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/3.5" class="kg-box {% if selected_kg == 3.5 %}active{% endif %}">
+                  3.5kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/4" class="kg-box {% if selected_kg == 4 %}active{% endif %}">
+                  4kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/4.5" class="kg-box {% if selected_kg == 4.5 %}active{% endif %}">
+                  4.5kg
+                </a>
+
+                <a href="/cart/kg/{{ cart.id }}/5" class="kg-box {% if selected_kg == 5 %}active{% endif %}">
+                  5kg
+                </a>
+
+              </div>
+            </div>
+
+            <div class="cart-quantity-section">
+              <label>Quantity</label>
+
+              <div class="cart-qty-controls big-qty">
+                <a href="/cart/decrease/{{ cart.id }}" class="qty-btn">−</a>
+                <strong>{{ qty }}</strong>
+                <a href="/cart/increase/{{ cart.id }}" class="qty-btn">+</a>
+              </div>
+            </div>
+
+            <div class="cart-amount-box">
+              <span>
+                ₹{{ "%.2f"|format(cart.item.price|float) }} × {{ selected_kg }}kg × {{ qty }} qty
+              </span>
+
+              <strong>
+
+                ₹{{ "%.2f"|format(amount|float) }}
+              </strong>
+            </div>
+
+          </div>
         </div>
 
-        <a href="/order/checkout" class="btn-primary" style="width:100%;margin-top:10px;display:flex;justify-content:center;">
+        {% endfor %}
+
+      </div>
+
+      <div class="cart-summary-box new-summary">
+        <h3>Order Summary</h3>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>₹{{ "%.2f"|format(total|float) }}</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Delivery</span>
+          <span style="color:var(--olive-main);font-weight:700;">FREE</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Tax</span>
+          <span>₹0</span>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>₹{{ "%.2f"|format(total|float) }}</span>
+        </div>
+
+        <a href="/order/checkout" class="btn-primary checkout-btn">
           <i class="fas fa-lock"></i> Proceed to Checkout
         </a>
 
-        <div style="display:flex;justify-content:center;gap:10px;margin-top:18px;opacity:0.6;font-size:22px;">
-          <i class="fab fa-cc-visa"></i>
-          <i class="fab fa-cc-mastercard"></i>
-          <i class="fas fa-university"></i>
-          <span style="font-size:12px;font-weight:700;padding:2px 6px;border:1px solid #ccc;border-radius:4px;">UPI</span>
-        </div>
-
-        <p style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:12px;">
-          <i class="fas fa-shield-alt" style="color:var(--olive-main);"></i> 100% Secure Checkout
+        <p class="secure-note">
+          <i class="fas fa-shield-alt"></i> 100% Secure Checkout
         </p>
       </div>
+
     </div>
 
     {% else %}
+
     <div class="empty-card" style="margin-top:30px;">
       <div style="font-size:64px;margin-bottom:18px;">🛒</div>
       <h3>Your cart is empty</h3>
       <p>Looks like you haven't added any products yet.</p>
+
       <a href="/products" class="btn-primary" style="display:inline-flex;margin-top:10px;">
         <i class="fas fa-shopping-bag"></i> Start Shopping
       </a>
     </div>
+
     {% endif %}
+
   </div>
 </section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  function toggleMoreKg(id) {
+    const box = document.getElementById(id);
+    box.classList.toggle("show");
+  }
+</script>
 {% endblock %}

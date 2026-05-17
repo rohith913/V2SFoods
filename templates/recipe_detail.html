@@ -164,14 +164,7 @@
         </ul>
 
         <!-- Nutrition -->
-        <div style="margin-top:18px;background:var(--olive-soft);border-radius:14px;padding:14px;">
-          <div style="font-weight:700;color:var(--olive-dark);font-size:13px;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">Nutrition (per serving)</div>
-          {% for key, val in recipe.nutrition.items() %}
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);padding:4px 0;">
-            <span>{{ key }}</span><strong style="color:var(--olive-dark);">{{ val }}</strong>
-          </div>
-          {% endfor %}
-        </div>
+     
 
         <!-- Shop Ingredients CTA -->
         <a href="/products" class="btn-primary" style="width:100%;margin-top:16px;display:flex;justify-content:center;">

@@ -60,6 +60,7 @@ class CartMaster(Base):
     created_datetime = Column(DateTime, default=datetime.utcnow)
     user = relationship("UserMaster")
     item = relationship("ItemMaster")
+    selected_kg = Column(Numeric(5, 2), default=0.5)
 
 
 class OrderMaster(Base):
