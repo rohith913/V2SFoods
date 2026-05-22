@@ -5,7 +5,7 @@
   <div class="container">
     <div style="font-size:40px;margin-bottom:16px;">🍲</div>
     <h1>Healthy Recipe Blog</h1>
-    <p>Delicious, nutritious recipes using our millet mixes & health products</p>
+    <p>Delicious, nutritious recipes using our millet mixes &amp; health products</p>
   </div>
 </div>
 
@@ -22,103 +22,34 @@
 
   <!-- Recipe Grid -->
   <div class="recipe-grid" id="recipeGrid">
-
-    <div class="recipe-card" data-cat="millet breakfast">
-      <div class="recipe-img">🥣
-        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 20 min</div>
+    {% for recipe in recipes %}
+    <div class="recipe-card" data-cat="{{ recipe.category|lower }}">
+      <div class="recipe-img">
+        {% if recipe.image_url %}
+          <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+        {% else %}
+          {{ recipe.emoji or '🍲' }}
+        {% endif %}
+        <div class="recipe-time-badge"><i class="fas fa-clock"></i> {{ recipe.time_minutes }}</div>
       </div>
       <div class="recipe-body">
-        <div class="recipe-category">Millet · Breakfast</div>
-        <h3>Ragi Malt Porridge</h3>
-        <p>A warm, creamy ragi porridge packed with calcium and iron – perfect for mornings.</p>
+        <div class="recipe-category">{{ recipe.category }}</div>
+        <h3>{{ recipe.title }}</h3>
+        <p>{{ recipe.description }}</p>
         <div class="recipe-meta">
-          <span><i class="fas fa-user"></i> 2 servings</span>
-          <span><i class="fas fa-fire"></i> Easy</span>
+          <span><i class="fas fa-user"></i> {{ recipe.servings }}</span>
+          <span><i class="fas fa-fire"></i> {{ recipe.difficulty }}</span>
         </div>
-        <a href="/recipes/ragi-malt" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
+        <a href="/recipes/{{ recipe.slug }}" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
       </div>
     </div>
-
-    <div class="recipe-card" data-cat="snacks millet">
-      <div class="recipe-img">🍪
-        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 35 min</div>
-      </div>
-      <div class="recipe-body">
-        <div class="recipe-category">Snacks · Millet</div>
-        <h3>Millet Ladoo (Kambu Urundai)</h3>
-        <p>Traditional pearl millet sweet balls with jaggery and coconut – a healthy treat.</p>
-        <div class="recipe-meta">
-          <span><i class="fas fa-user"></i> 12 pieces</span>
-          <span><i class="fas fa-fire"></i> Medium</span>
-        </div>
-        <a href="/recipes/millet-ladoo" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
-      </div>
+    {% else %}
+    <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted);">
+      <div style="font-size:48px;margin-bottom:16px;">🍽️</div>
+      <h3>No recipes yet</h3>
+      <p>Admin can add recipes from the dashboard.</p>
     </div>
-
-    <div class="recipe-card" data-cat="drinks breakfast">
-      <div class="recipe-img">🥤
-        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 10 min</div>
-      </div>
-      <div class="recipe-body">
-        <div class="recipe-category">Health Drinks · Breakfast</div>
-        <h3>Health Mix Energy Drink</h3>
-        <p>Blend our health mix with milk or water for a quick, nutrition-packed energy booster.</p>
-        <div class="recipe-meta">
-          <span><i class="fas fa-user"></i> 1 serving</span>
-          <span><i class="fas fa-fire"></i> Very Easy</span>
-        </div>
-        <a href="/recipes/health-mix-drink" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
-      </div>
-    </div>
-
-    <div class="recipe-card" data-cat="kids breakfast millet">
-      <div class="recipe-img">🥞
-        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 25 min</div>
-      </div>
-      <div class="recipe-body">
-        <div class="recipe-category">Kids Special · Breakfast</div>
-        <h3>Millet Pancakes</h3>
-        <p>Fluffy, golden millet pancakes that kids love – healthy and filling for school days.</p>
-        <div class="recipe-meta">
-          <span><i class="fas fa-user"></i> 4 servings</span>
-          <span><i class="fas fa-fire"></i> Easy</span>
-        </div>
-        <a href="/recipes/millet-pancakes" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
-      </div>
-    </div>
-
-    <div class="recipe-card" data-cat="snacks">
-      <div class="recipe-img">🥗
-        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 15 min</div>
-      </div>
-      <div class="recipe-body">
-        <div class="recipe-category">Snacks</div>
-        <h3>Sprouted Mung Dal Salad</h3>
-        <p>A refreshing and protein-rich salad with sprouted lentils, veggies, and lemon dressing.</p>
-        <div class="recipe-meta">
-          <span><i class="fas fa-user"></i> 2 servings</span>
-          <span><i class="fas fa-fire"></i> Easy</span>
-        </div>
-        <a href="/recipes/mung-salad" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
-      </div>
-    </div>
-
-    <div class="recipe-card" data-cat="drinks kids">
-      <div class="recipe-img">🍵
-        <div class="recipe-time-badge"><i class="fas fa-clock"></i> 10 min</div>
-      </div>
-      <div class="recipe-body">
-        <div class="recipe-category">Drinks · Kids</div>
-        <h3>Herbal Tulsi Ginger Tea</h3>
-        <p>A soothing herbal tea with tulsi and ginger – natural immunity booster for all ages.</p>
-        <div class="recipe-meta">
-          <span><i class="fas fa-user"></i> 2 cups</span>
-          <span><i class="fas fa-fire"></i> Very Easy</span>
-        </div>
-        <a href="/recipes/tulsi-tea" class="btn-outline btn-sm" style="display:inline-flex;margin-top:14px;">View Recipe →</a>
-      </div>
-    </div>
-
+    {% endfor %}
   </div>
 
   <!-- CTA Banner -->

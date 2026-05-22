@@ -6,10 +6,17 @@
     <h2>Order Placed Successfully!</h2>
     <p>Thank you for shopping with V2S Foods. Your order has been received and is being processed.</p>
     <div class="order-no-badge">{{ order_no }}</div>
+
     <div style="background:var(--olive-soft);border-radius:16px;padding:18px;margin-bottom:24px;text-align:left;">
+      {% if invoice_no %}
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <span style="color:var(--text-muted);">Invoice No</span>
+        <strong style="color:var(--olive-dark);">{{ invoice_no }}</strong>
+      </div>
+      {% endif %}
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
         <span style="color:var(--text-muted);">Total Amount</span>
-        <strong style="color:var(--olive-dark);font-size:18px;">₹{{ total_amount }}</strong>
+        <strong style="color:var(--olive-dark);font-size:18px;">₹{{ "%.2f"|format(total_amount|float) }}</strong>
       </div>
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
         <span style="color:var(--text-muted);">Payment</span>
@@ -20,9 +27,11 @@
         <span class="status-badge">BOOKED</span>
       </div>
     </div>
+
     <div style="background:#d4edda;border-radius:14px;padding:14px;margin-bottom:24px;color:#155724;font-size:14px;">
       <i class="fas fa-info-circle"></i> A confirmation message will be sent to your registered contact. Expected delivery in 3–5 business days.
     </div>
+
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
       <a href="/user/orders" class="btn-primary"><i class="fas fa-box"></i> Track Orders</a>
       <a href="/products" class="btn-outline"><i class="fas fa-shopping-bag"></i> Continue Shopping</a>

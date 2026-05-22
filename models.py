@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, Text, Boolean
+from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, Text, Boolean, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -67,6 +67,7 @@ class OrderMaster(Base):
     __tablename__ = "order_master"
     id = Column(Integer, primary_key=True, index=True)
     order_no = Column(String(100), unique=True)
+    invoice_no = Column(String(100), unique=True, nullable=True)
     user_id = Column(Integer, ForeignKey("user_master.id"))
     total_amount = Column(Numeric(10, 2))
     status = Column(String(50), default="BOOKED")
@@ -115,4 +116,27 @@ class RecipeComment(Base):
     author_email = Column(String(300))
     comment = Column(Text)
     approved = Column(Boolean, default=True)
+    created_datetime = Column(DateTime, default=datetime.utcnow)
+
+
+# ── Dynamic Recipe Model ─────────────────────────────────────────────────────
+class RecipeMaster(Base):
+    __tablename__ = "recipe_master"
+    id = Column(Integer, primary_key=True, index=True)
+    slug = Column(String(200), unique=True, index=True)
+    title = Column(String(300), nullable=False)
+    description = Column(Text)
+    category = Column(String(200))
+    time_minutes = Column(String(50))   # e.g. "20 minutes"
+    servings = Column(String(100))      # e.g. "2 servings"
+    difficulty = Column(String(50))     # Easy / Medium / Hard
+    emoji = Column(String(20), default="🍲")
+    about = Column(Text)
+    # JSON arrays stored as Text
+    ingredients_json = Column(Text, default="[]")
+    steps_json = Column(Text, default="[]")
+    tips_json = Column(Text, default="[]")
+    nutrition_json = Column(Text, default="{}")
+    image_url = Column(Text, default="")
+    status = Column(String(20), default="ACTIVE")
     created_datetime = Column(DateTime, default=datetime.utcnow)

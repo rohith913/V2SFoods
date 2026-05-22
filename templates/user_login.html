@@ -1,38 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>User Login</title>
+    <meta charset="UTF-8">
+    <title>Login – V2S Foods</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
-
-<div class="login-wrapper">
-    <div class="login-card">
-        <div class="login-brand">
-            <span class="brand-label">V2S Foods</span>
-            <p class="brand-subtitle">Millexa HealthMix · Traditional wellness, globally delivered.</p>
-            <h2>User Login</h2>
-            <p class="brand-tagline">Securely access your account and manage your wellness orders.</p>
+<body class="login-body">
+<div class="auth-split">
+    <div class="auth-panel-left">
+        <div class="auth-hero-logo">
+            <img src="/static/images/logo.png" alt="Logo">
         </div>
+        <div class="auth-brand-logo">V2S <span>Foods</span></div>
+        <p class="auth-brand-tagline">Millexa HealthMix · Traditional wellness, naturally delivered to your door.</p>
+        <div class="trust-pills">
+            <div class="trust-pill"><i class="fas fa-leaf"></i> 100% Natural Ingredients</div>
+            <div class="trust-pill"><i class="fas fa-ban"></i> No Preservatives Added</div>
+            <div class="trust-pill"><i class="fas fa-truck"></i> Pan India Delivery</div>
+            <div class="trust-pill"><i class="fas fa-shield-alt"></i> FSSAI Certified</div>
+        </div>
+    </div>
 
-        {% if error %}
-        <p class="error">{{ error }}</p>
-        {% endif %}
+    <div class="auth-panel-right">
+        <div class="auth-form-wrap">
+            <div class="auth-portal-badge"><i class="fas fa-user"></i> &nbsp;Customer Portal</div>
+            <h1 class="auth-title">Welcome back</h1>
+            <p class="auth-subtitle">Sign in to track orders and shop our health products</p>
 
-        <form method="post">
-            <input type="hidden" name="next" value="{{ next or '/products' }}">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            {% if error %}
+            <div class="auth-error"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+            {% endif %}
 
-            <button type="submit" class="btn-maroon">Login</button>
-        </form>
+            <form method="post">
+                <input type="hidden" name="next" value="{{ next or '/products' }}">
+                <div class="form-field">
+                    <label>Email Address</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="you@example.com" required autocomplete="email">
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label>Password</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                    </div>
+                </div>
+                <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> &nbsp;Sign In</button>
+            </form>
 
-        <p class="login-note">
-            New user?
-            <a href="/user/register">Register</a>
-        </p>
+            <div class="divider">or</div>
+
+            <div class="auth-footer-link">
+                New to V2S Foods? <a href="/user/register">Create an account</a>
+            </div>
+        </div>
     </div>
 </div>
-
 </body>
 </html>

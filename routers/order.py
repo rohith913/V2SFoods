@@ -17,31 +17,35 @@ def redirect_to_user_login(request: Request):
     return RedirectResponse(f"/user/login?next={next_url}", status_code=302)
 
 
+def generate_invoice_no(db: Session) -> str:
+    """Generate sequential invoice number like INV-2024-0001"""
+    year = datetime.now().year
+    prefix = f"INV-{year}-"
+    # Count existing invoices this year
+    count = db.query(OrderMaster).filter(
+        OrderMaster.invoice_no.like(f"{prefix}%")
+    ).count()
+    return f"{prefix}{str(count + 1).zfill(4)}"
+
+
 @router.get("/checkout")
 def checkout_page(request: Request, db: Session = Depends(get_db)):
     if not request.session.get("user_id"):
         return redirect_to_user_login(request)
 
     user_id = request.session.get("user_id")
-
-    cart_items = db.query(CartMaster).filter(
-        CartMaster.user_id == user_id
-    ).all()
+    cart_items = db.query(CartMaster).filter(CartMaster.user_id == user_id).all()
 
     if not cart_items:
         return RedirectResponse("/cart/", status_code=302)
 
-    user = db.query(UserMaster).filter(
-        UserMaster.id == user_id
-    ).first()
+    user = db.query(UserMaster).filter(UserMaster.id == user_id).first()
 
     total = Decimal("0.00")
-
     for cart in cart_items:
         price = Decimal(str(cart.item.price or 0))
         selected_kg = Decimal(str(cart.selected_kg or 0.5))
         qty = Decimal(str(cart.qty or 1))
-
         total += price * selected_kg * qty
 
     return templates.TemplateResponse(
@@ -64,22 +68,31 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
 
     form = await request.form()
     payment_method = form.get("payment_method", "cod")
-    full_name  = form.get("full_name", "")
-    mobile     = form.get("mobile", "")
-    address    = form.get("address", "")
-    city       = form.get("city", "")
-    state      = form.get("state", "Tamil Nadu")
-    pincode    = form.get("pincode", "")
+    full_name = form.get("full_name", "")
+    mobile = form.get("mobile", "")
+    address = form.get("address", "")
+    city = form.get("city", "")
+    state = form.get("state", "Tamil Nadu")
+    pincode = form.get("pincode", "")
 
     cart_items = db.query(CartMaster).filter(CartMaster.user_id == user_id).all()
     if not cart_items:
         return RedirectResponse("/cart/", status_code=302)
 
-    total_amount = sum(float(c.item.price) * c.qty for c in cart_items)
+    # ── FIX: calculate total using selected_kg (matching checkout) ──
+    total_amount = Decimal("0.00")
+    for c in cart_items:
+        price = Decimal(str(c.item.price or 0))
+        selected_kg = Decimal(str(c.selected_kg or 0.5))
+        qty = Decimal(str(c.qty or 1))
+        total_amount += price * selected_kg * qty
+
     order_no = "ORD" + datetime.now().strftime("%Y%m%d%H%M%S")
+    invoice_no = generate_invoice_no(db)
 
     order = OrderMaster(
         order_no=order_no,
+        invoice_no=invoice_no,
         user_id=user_id,
         total_amount=total_amount,
         status="BOOKED",
@@ -99,18 +112,16 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
         price = Decimal(str(cart.item.price or 0))
         selected_kg = Decimal(str(cart.selected_kg or 0.5))
         qty = Decimal(str(cart.qty or 1))
-
         amount = price * selected_kg * qty
 
         detail = OrderDetail(
             order_id=order.id,
             item_id=cart.item_id,
-            qty=int(qty),
+            qty=int(cart.qty or 1),
             selected_kg=selected_kg,
             price=price,
             amount=amount
         )
-
         db.add(detail)
 
     for cart in cart_items:
@@ -120,7 +131,8 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
 
     return templates.TemplateResponse(request=request, name="order_success.html", context={
         "order_no": order_no,
-        "total_amount": total_amount,
+        "invoice_no": invoice_no,
+        "total_amount": float(total_amount),
         "payment_method": payment_method.upper().replace("_", " "),
     })
 
@@ -130,3 +142,25 @@ def booking_order(request: Request):
     if not request.session.get("user_id"):
         return redirect_to_user_login(request)
     return RedirectResponse("/order/checkout", status_code=302)
+
+
+@router.get("/invoice/{order_id}")
+def view_invoice(order_id: int, request: Request, db: Session = Depends(get_db)):
+    """Printable invoice page – accessible by user or admin."""
+    user_id = request.session.get("user_id")
+    admin_id = request.session.get("admin_id")
+    if not user_id and not admin_id:
+        return redirect_to_user_login(request)
+
+    order = db.query(OrderMaster).filter(OrderMaster.id == order_id).first()
+    if not order:
+        return RedirectResponse("/products", status_code=302)
+
+    # Users can only see their own invoices
+    if user_id and order.user_id != user_id:
+        return RedirectResponse("/user/orders", status_code=302)
+
+    return templates.TemplateResponse(request=request, name="invoice.html", context={
+        "order": order,
+        "title": f"Invoice {order.invoice_no} – V2S Foods"
+    })
