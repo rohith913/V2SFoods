@@ -68,8 +68,9 @@
 
     @media print {
       body { background:white; padding:0; }
-      .inv-actions { display:none; }
-      .inv-wrap { box-shadow:none; border-radius:0; }
+      .inv-actions { display:none !important; }
+      .invoice-wrap { box-shadow:none; border-radius:0; }
+      .inv-header { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     }
   </style>
 </head>
@@ -79,9 +80,10 @@
   <!-- Header -->
   <div class="inv-header">
     <div class="inv-brand">
-      <h1>V2S <span>Foods</span></h1>
-      <p>Millexa HealthMix · Virudhunagar, Tamil Nadu 626002</p>
-      <p>v2s.millexa@gmail.com · +91 73053 30100</p>
+      <img src="/static/images/footer.png" alt="V2S Foods"
+           style="height:64px;object-fit:contain;filter:brightness(0) invert(1);opacity:0.93;margin-bottom:10px;display:block;">
+      <p style="margin:0;font-size:12px;color:rgba(255,255,255,0.65);">Millexa HealthMix · Virudhunagar, Tamil Nadu 626002</p>
+      <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.65);">v2s.millexa@gmail.com · +91 73053 30100</p>
     </div>
     <div class="inv-badge">
       <div class="inv-label">Invoice</div>

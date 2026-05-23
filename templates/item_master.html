@@ -10,7 +10,6 @@
                 <small class="section-label">Admin Item Management</small>
                 <h1 class="page-title">Item Master</h1>
             </div>
-
             <button type="button" class="btn-primary" onclick="openItemModal()">
                 + Add New
             </button>
@@ -26,7 +25,6 @@
                     <label>Search Item Name</label>
                     <input type="text" name="search_item" value="{{ search_item or '' }}" placeholder="Enter item name">
                 </div>
-
                 <div class="search-actions">
                     <button type="submit" class="btn-primary">Search</button>
                     <a href="/admin/item-master" class="btn-outline">Clear</a>
@@ -46,9 +44,9 @@
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {% for item in items %}
                     <tr>
@@ -62,22 +60,30 @@
                             {% endif %}
                         </td>
                         <td>
-                            <strong>{{ item.item_name }}</strong>
-                            <br>
-                            <small>{{ item.description }}</small>
+                            <strong>{{ item.item_name }}</strong><br>
+                            <small>{{ item.description[:60] if item.description else '' }}{% if item.description and item.description|length > 60 %}…{% endif %}</small>
                         </td>
                         <td>{{ item.category }}</td>
                         <td>₹{{ item.price }}</td>
                         <td>{{ item.stock_qty }}</td>
+                        <td><span class="status-badge {% if item.status == 'ACTIVE' %}active-badge{% else %}inactive-badge{% endif %}">{{ item.status }}</span></td>
                         <td>
-                            <span class="status-badge">{{ item.status }}</span>
+                            <div style="display:flex;gap:6px;align-items:center;">
+                                <a href="/admin/item-master/edit/{{ item.id }}" class="btn-outline btn-sm" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="POST" action="/admin/item-master/delete/{{ item.id }}" style="display:inline;"
+                                      onsubmit="return confirm('Delete {{ item.item_name }}? This cannot be undone.');">
+                                    <button type="submit" class="btn-outline btn-sm" style="color:#e74c3c;border-color:#e74c3c;" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="8" style="text-align:center;">
-                            No items found
-                        </td>
+                        <td colspan="9" style="text-align:center;">No items found</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -89,43 +95,35 @@
 
 
 <!-- Add Item Modal -->
-<!-- Add Item Modal -->
 <div class="modal-overlay" id="itemModal">
     <div class="modal-box large-modal">
-
         <div class="modal-header">
             <h2>Add New Item</h2>
             <button type="button" class="modal-close" onclick="closeItemModal()">×</button>
         </div>
 
         <form method="post" action="/admin/item-master" class="modal-form" enctype="multipart/form-data">
-
             <div class="form-grid">
                 <div>
                     <label>Item Code</label>
                     <input type="text" name="item_code" required>
                 </div>
-
                 <div>
                     <label>Item Name</label>
                     <input type="text" name="item_name" required>
                 </div>
-
                 <div>
                     <label>Category</label>
                     <input type="text" name="category">
                 </div>
-
                 <div>
                     <label>Price</label>
                     <input type="number" step="0.01" name="price" required>
                 </div>
-
                 <div>
                     <label>Stock Qty</label>
                     <input type="number" name="stock_qty" required>
                 </div>
-
                 <div>
                     <label>Status</label>
                     <select name="status">
@@ -137,79 +135,46 @@
 
             <label>Description</label>
             <textarea name="description" placeholder="Enter item description"></textarea>
-
             <label>Ingredients</label>
             <textarea name="ingredients" placeholder="Enter ingredients"></textarea>
-
             <label>How to Use</label>
             <textarea name="how_to_use" placeholder="Enter how to use"></textarea>
-
             <label>Specifications</label>
             <textarea name="specifications" placeholder="Enter specifications"></textarea>
 
             <div class="form-grid">
-                <div>
-                    <label>Main Image</label>
-                    <input type="file" name="main_image" accept="image/*">
-                </div>
-
-                <div>
-                    <label>Image 1</label>
-                    <input type="file" name="image_1" accept="image/*">
-                </div>
-
-                <div>
-                    <label>Image 2</label>
-                    <input type="file" name="image_2" accept="image/*">
-                </div>
-
-                <div>
-                    <label>Image 3</label>
-                    <input type="file" name="image_3" accept="image/*">
-                </div>
-
-                <div>
-                    <label>Image 4</label>
-                    <input type="file" name="image_4" accept="image/*">
-                </div>
-
-                <div>
-                    <label>Image 5</label>
-                    <input type="file" name="image_5" accept="image/*">
-                </div>
+                <div><label>Main Image</label><input type="file" name="main_image" accept="image/*"></div>
+                <div><label>Image 1</label><input type="file" name="image_1" accept="image/*"></div>
+                <div><label>Image 2</label><input type="file" name="image_2" accept="image/*"></div>
+                <div><label>Image 3</label><input type="file" name="image_3" accept="image/*"></div>
+                <div><label>Image 4</label><input type="file" name="image_4" accept="image/*"></div>
+                <div><label>Image 5</label><input type="file" name="image_5" accept="image/*"></div>
             </div>
 
-            <label>Product Video Max 10 MB</label>
+            <label>Product Video (Max 10 MB)</label>
             <input type="file" name="video_file" accept="video/*">
 
             <div class="modal-actions">
                 <button type="button" class="btn-outline" onclick="closeItemModal()">Cancel</button>
                 <button type="submit" class="btn-primary">Save Item</button>
             </div>
-
         </form>
     </div>
 </div>
 
-{% endblock %}
+<style>
+.active-badge { background:#d4edda;color:#155724; }
+.inactive-badge { background:#f8d7da;color:#721c24; }
+</style>
 
+{% endblock %}
 
 {% block script %}
 <script>
-    function openItemModal() {
-        document.getElementById("itemModal").classList.add("show");
-    }
-
-    function closeItemModal() {
-        document.getElementById("itemModal").classList.remove("show");
-    }
-
-    window.addEventListener("click", function (event) {
-        const modal = document.getElementById("itemModal");
-
-        if (event.target === modal) {
-            closeItemModal();
-        }
+    function openItemModal() { document.getElementById("itemModal").classList.add("show"); }
+    function closeItemModal() { document.getElementById("itemModal").classList.remove("show"); }
+    window.addEventListener("click", function(e) {
+        if (e.target === document.getElementById("itemModal")) closeItemModal();
     });
 </script>
 {% endblock %}

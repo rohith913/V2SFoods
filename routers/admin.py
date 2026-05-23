@@ -70,13 +70,49 @@ def admin_dashboard(request: Request, db: Session = Depends(get_db)):
 
 
 @router.get("/billing-summary")
-def billing_summary(request: Request, db: Session = Depends(get_db)):
+def billing_summary(
+    request: Request,
+    db: Session = Depends(get_db),
+    from_date: str = "",
+    to_date: str = "",
+    status_filter: str = ""
+):
     if not request.session.get("admin_id"):
         return RedirectResponse("/admin/login")
-    orders = db.query(OrderMaster).order_by(OrderMaster.id.desc()).all()
+
+    from datetime import datetime as dt
+    query = db.query(OrderMaster)
+
+    if from_date:
+        try:
+            fd = dt.strptime(from_date, "%Y-%m-%d")
+            query = query.filter(OrderMaster.booking_datetime >= fd)
+        except ValueError:
+            pass
+
+    if to_date:
+        try:
+            td = dt.strptime(to_date, "%Y-%m-%d")
+            # include the full to_date day
+            from datetime import timedelta
+            query = query.filter(OrderMaster.booking_datetime < td + timedelta(days=1))
+        except ValueError:
+            pass
+
+    if status_filter:
+        query = query.filter(OrderMaster.status == status_filter)
+
+    orders = query.order_by(OrderMaster.id.desc()).all()
     total_amount = sum(float(order.total_amount or 0) for order in orders)
+
     return templates.TemplateResponse(request=request, name="billing_summary.html",
-                                      context={"orders": orders, "total_amount": total_amount})
+                                      context={
+                                          "orders": orders,
+                                          "total_amount": total_amount,
+                                          "from_date": from_date,
+                                          "to_date": to_date,
+                                          "status_filter": status_filter
+                                      })
 
 
 @router.get("/all-orders")

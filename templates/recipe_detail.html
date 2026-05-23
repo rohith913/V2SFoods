@@ -12,7 +12,7 @@
     <p style="color:rgba(255,255,255,0.82);font-size:16px;margin:0 0 24px;max-width:600px;">{{ recipe.description }}</p>
     <div style="display:flex;gap:20px;flex-wrap:wrap;padding-bottom:30px;">
       <div style="background:rgba(255,255,255,0.12);border-radius:12px;padding:12px 18px;color:white;display:flex;align-items:center;gap:8px;font-size:14px;">
-        <i class="fas fa-clock" style="color:#c8d993;"></i> {{ recipe.time }}
+        <i class="fas fa-clock" style="color:#c8d993;"></i> {{ recipe.time_minutes or recipe.time }}
       </div>
       <div style="background:rgba(255,255,255,0.12);border-radius:12px;padding:12px 18px;color:white;display:flex;align-items:center;gap:8px;font-size:14px;">
         <i class="fas fa-users" style="color:#c8d993;"></i> {{ recipe.servings }}
@@ -35,15 +35,24 @@
     <div>
 
       <!-- Recipe Image -->
-      <div style="background:linear-gradient(135deg,var(--olive-light),var(--olive-soft));border-radius:24px;height:320px;display:flex;align-items:center;justify-content:center;font-size:100px;margin-bottom:28px;border:1px solid var(--border);box-shadow:var(--shadow);">
-        {{ recipe.emoji }}
+      <div style="border-radius:24px;overflow:hidden;height:320px;margin-bottom:28px;border:1px solid var(--border);box-shadow:var(--shadow);background:var(--olive-soft);">
+        {% if recipe.image_url %}
+          <img src="{{ recipe.image_url }}" alt="{{ recipe.title }}"
+               style="width:100%;height:100%;object-fit:cover;display:block;">
+        {% else %}
+          <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--olive-light),var(--olive-soft));">
+            <img src="/static/images/footer.png" alt="V2S Foods" style="width:180px;opacity:0.35;">
+          </div>
+        {% endif %}
       </div>
 
       <!-- About -->
+      {% if recipe.about %}
       <div style="background:white;border-radius:22px;padding:28px;border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:24px;">
         <h2 style="color:var(--olive-dark);margin:0 0 14px;font-size:22px;"><i class="fas fa-info-circle" style="color:var(--olive-main);margin-right:8px;"></i>About this Recipe</h2>
         <p style="color:var(--text-muted);line-height:1.8;margin:0;">{{ recipe.about }}</p>
       </div>
+      {% endif %}
 
       <!-- Steps -->
       <div style="background:white;border-radius:22px;padding:28px;border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:24px;">
@@ -58,6 +67,7 @@
       </div>
 
       <!-- Tips -->
+      {% if recipe.tips %}
       <div style="background:var(--olive-soft);border:1px solid var(--border);border-radius:22px;padding:24px;margin-bottom:32px;">
         <h3 style="color:var(--olive-dark);margin:0 0 14px;font-size:18px;"><i class="fas fa-lightbulb" style="color:#f0a500;margin-right:8px;"></i>Pro Tips</h3>
         <ul style="padding-left:20px;margin:0;">
@@ -66,11 +76,12 @@
           {% endfor %}
         </ul>
       </div>
+      {% endif %}
 
       <!-- COMMENTS SECTION -->
-      <div style="background:white;border-radius:22px;padding:28px;border:1px solid var(--border);box-shadow:var(--shadow);">
+      <div style="background:white;border-radius:22px;padding:28px;border:1px solid var(--border);box-shadow:var(--shadow);" id="comments">
         <h2 style="color:var(--olive-dark);margin:0 0 6px;font-size:22px;">
-          <i class="fas fa-comments" style="color:var(--olive-main);margin-right:8px;"></i>Reviews & Comments
+          <i class="fas fa-comments" style="color:var(--olive-main);margin-right:8px;"></i>Reviews &amp; Comments
           <span style="font-size:14px;font-weight:500;color:var(--text-muted);margin-left:8px;">({{ comments|length }})</span>
         </h2>
         <p style="color:var(--text-muted);font-size:14px;margin:0 0 24px;">Share your experience with this recipe!</p>
@@ -93,11 +104,9 @@
             </div>
             <div class="form-group" style="margin-bottom:14px;">
               <label style="display:block;font-weight:600;color:var(--olive-dark);margin-bottom:6px;font-size:13px;">Your Comment *</label>
-              <textarea name="comment" rows="4" placeholder="Tell us how the recipe turned out, any variations you tried, or tips for others..." required
+              <textarea name="comment" rows="4" placeholder="Tell us how the recipe turned out..." required
                 style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:12px;outline:none;font-size:14px;resize:vertical;box-sizing:border-box;"></textarea>
             </div>
-
-            <!-- Star Rating -->
             <div style="margin-bottom:16px;">
               <label style="font-weight:600;color:var(--olive-dark);font-size:13px;display:block;margin-bottom:8px;">Rating</label>
               <div class="star-rating" id="starRating">
@@ -109,7 +118,6 @@
               </div>
               <input type="hidden" name="rating" id="ratingInput" value="5">
             </div>
-
             <button type="submit" class="btn-primary" style="gap:8px;">
               <i class="fas fa-paper-plane"></i> Post Comment
             </button>
@@ -149,8 +157,6 @@
 
     <!-- RIGHT SIDEBAR -->
     <div>
-
-      <!-- Ingredients -->
       <div style="background:white;border-radius:22px;padding:24px;border:1px solid var(--border);box-shadow:var(--shadow);margin-bottom:22px;position:sticky;top:90px;">
         <h3 style="color:var(--olive-dark);margin:0 0 16px;font-size:18px;border-bottom:1px solid var(--border);padding-bottom:12px;">
           <i class="fas fa-mortar-pestle" style="color:var(--olive-main);margin-right:6px;"></i> Ingredients
@@ -162,39 +168,26 @@
           </li>
           {% endfor %}
         </ul>
-
-        <!-- Nutrition -->
-     
-
-        <!-- Shop Ingredients CTA -->
         <a href="/products" class="btn-primary" style="width:100%;margin-top:16px;display:flex;justify-content:center;">
           <i class="fas fa-shopping-bag"></i> Buy Ingredients
         </a>
       </div>
-
     </div>
+
   </div>
 </main>
 
 <style>
-.star-rating .star {
-  font-size: 28px;
-  color: #ddd;
-  cursor: pointer;
-  transition: color 0.15s;
-}
-.star-rating .star.active, .star-rating .star:hover {
-  color: #f0a500;
-}
+.star-rating .star { font-size:28px;color:#ddd;cursor:pointer;transition:color 0.15s; }
+.star-rating .star.active, .star-rating .star:hover { color:#f0a500; }
 @media(max-width:800px) {
-  .recipe-detail-grid { grid-template-columns: 1fr !important; }
-  .comment-form-grid { grid-template-columns: 1fr !important; }
+  .recipe-detail-grid { grid-template-columns:1fr !important; }
+  .comment-form-grid { grid-template-columns:1fr !important; }
 }
 </style>
 
 {% block script %}
 <script>
-// Like toggle
 let liked = {{ 'true' if liked else 'false' }};
 let likeCount = {{ like_count }};
 
@@ -209,7 +202,6 @@ function toggleLike() {
     });
 }
 
-// Star rating
 function setRating(val) {
   document.getElementById('ratingInput').value = val;
   document.querySelectorAll('.star').forEach((s, i) => {

@@ -208,3 +208,106 @@ def product_list(request: Request, db: Session = Depends(get_db)):
             "items": items
         }
     )
+
+@router.get("/admin/item-master/edit/{item_id}")
+def edit_item_page(item_id: int, request: Request, db: Session = Depends(get_db)):
+    if not request.session.get("admin_id"):
+        return RedirectResponse("/admin/login")
+    item = db.query(ItemMaster).filter(ItemMaster.id == item_id).first()
+    if not item:
+        return RedirectResponse("/admin/item-master")
+    return templates.TemplateResponse(
+        request=request,
+        name="item_edit.html",
+        context={"item": item}
+    )
+
+
+@router.post("/admin/item-master/edit/{item_id}")
+def edit_item(
+    item_id: int,
+    request: Request,
+    item_code: str = Form(...),
+    item_name: str = Form(...),
+    description: str = Form(""),
+    category: str = Form(""),
+    ingredients: str = Form(""),
+    how_to_use: str = Form(""),
+    specifications: str = Form(""),
+    price: float = Form(...),
+    stock_qty: int = Form(...),
+    status: str = Form("ACTIVE"),
+    main_image: UploadFile = File(None),
+    image_1: UploadFile = File(None),
+    image_2: UploadFile = File(None),
+    image_3: UploadFile = File(None),
+    image_4: UploadFile = File(None),
+    image_5: UploadFile = File(None),
+    video_file: UploadFile = File(None),
+    db: Session = Depends(get_db)
+):
+    if not request.session.get("admin_id"):
+        return RedirectResponse("/admin/login")
+
+    item = db.query(ItemMaster).filter(ItemMaster.id == item_id).first()
+    if not item:
+        return RedirectResponse("/admin/item-master")
+
+    # Check code conflict (exclude self)
+    conflict = db.query(ItemMaster).filter(
+        ItemMaster.item_code == item_code,
+        ItemMaster.id != item_id
+    ).first()
+    if conflict:
+        return templates.TemplateResponse(
+            request=request,
+            name="item_edit.html",
+            context={"item": item, "error": "Item code already used by another item"}
+        )
+
+    item.item_code = item_code
+    item.item_name = item_name
+    item.description = description
+    item.category = category
+    item.ingredients = ingredients
+    item.how_to_use = how_to_use
+    item.specifications = specifications
+    item.price = price
+    item.stock_qty = stock_qty
+    item.status = status
+
+    try:
+        if main_image and main_image.filename:
+            item.main_image = save_upload_file(main_image, allowed_types=["image/"])
+        if image_1 and image_1.filename:
+            item.image_1 = save_upload_file(image_1, allowed_types=["image/"])
+        if image_2 and image_2.filename:
+            item.image_2 = save_upload_file(image_2, allowed_types=["image/"])
+        if image_3 and image_3.filename:
+            item.image_3 = save_upload_file(image_3, allowed_types=["image/"])
+        if image_4 and image_4.filename:
+            item.image_4 = save_upload_file(image_4, allowed_types=["image/"])
+        if image_5 and image_5.filename:
+            item.image_5 = save_upload_file(image_5, allowed_types=["image/"])
+        if video_file and video_file.filename:
+            item.video_url = save_video_file(video_file)
+    except ValueError as e:
+        return templates.TemplateResponse(
+            request=request,
+            name="item_edit.html",
+            context={"item": item, "error": str(e)}
+        )
+
+    db.commit()
+    return RedirectResponse("/admin/item-master", status_code=302)
+
+
+@router.post("/admin/item-master/delete/{item_id}")
+def delete_item(item_id: int, request: Request, db: Session = Depends(get_db)):
+    if not request.session.get("admin_id"):
+        return RedirectResponse("/admin/login")
+    item = db.query(ItemMaster).filter(ItemMaster.id == item_id).first()
+    if item:
+        db.delete(item)
+        db.commit()
+    return RedirectResponse("/admin/item-master", status_code=302)

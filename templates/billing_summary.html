@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-
 {% block content %}
-
 <section class="page-section">
     <div class="container">
 
@@ -10,12 +8,53 @@
                 <small>Admin Billing</small>
                 <h2>Billing Summary</h2>
             </div>
-
             <div class="summary-total-card">
-                <span>Total Billing</span>
-                <h2>₹{{ total_amount }}</h2>
+                <span>Filtered Total</span>
+                <h2>₹{{ "%.2f"|format(total_amount|float) }}</h2>
             </div>
         </div>
+
+        <!-- Date Filter -->
+        <div class="search-card" style="margin-bottom:20px;">
+            <form method="get" action="/admin/billing-summary" style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;">
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                    <label style="font-size:12px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:0.4px;">From Date</label>
+                    <input type="date" name="from_date" value="{{ from_date or '' }}"
+                           style="padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fafafa;outline:none;">
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                    <label style="font-size:12px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:0.4px;">To Date</label>
+                    <input type="date" name="to_date" value="{{ to_date or '' }}"
+                           style="padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fafafa;outline:none;">
+                </div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                    <label style="font-size:12px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:0.4px;">Status</label>
+                    <select name="status_filter"
+                            style="padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fafafa;outline:none;min-width:140px;">
+                        <option value="" {% if not status_filter %}selected{% endif %}>All Statuses</option>
+                        <option value="BOOKED" {% if status_filter == 'BOOKED' %}selected{% endif %}>Booked</option>
+                        <option value="DELIVERED" {% if status_filter == 'DELIVERED' %}selected{% endif %}>Delivered</option>
+                        <option value="NOT DELIVERED" {% if status_filter == 'NOT DELIVERED' %}selected{% endif %}>Not Delivered</option>
+                    </select>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button type="submit" class="btn-primary" style="padding:10px 20px;">
+                        <i class="fas fa-search"></i> Filter
+                    </button>
+                    <a href="/admin/billing-summary" class="btn-outline" style="padding:10px 20px;">Clear</a>
+                </div>
+            </form>
+        </div>
+
+        {% if from_date or to_date or status_filter %}
+        <div style="background:var(--olive-light);border-radius:12px;padding:12px 18px;margin-bottom:16px;font-size:14px;color:var(--olive-dark);display:flex;align-items:center;gap:8px;">
+            <i class="fas fa-filter"></i>
+            Showing <strong>{{ orders|length }}</strong> order(s)
+            {% if from_date %} from <strong>{{ from_date }}</strong>{% endif %}
+            {% if to_date %} to <strong>{{ to_date }}</strong>{% endif %}
+            {% if status_filter %} · Status: <strong>{{ status_filter }}</strong>{% endif %}
+        </div>
+        {% endif %}
 
         <div class="table-card">
             <table>
@@ -23,32 +62,46 @@
                     <tr>
                         <th>S.No</th>
                         <th>Order No</th>
+                        <th>Invoice No</th>
                         <th>User Name</th>
                         <th>Email</th>
                         <th>Total Amount</th>
+                        <th>Payment</th>
                         <th>Status</th>
                         <th>Booking Date</th>
+                        <th>Invoice</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {% for order in orders %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ order.order_no }}</td>
+                        <td><strong>{{ order.order_no }}</strong></td>
+                        <td style="color:var(--olive-dark);font-weight:600;">{{ order.invoice_no or '—' }}</td>
                         <td>{{ order.user.username if order.user else '-' }}</td>
                         <td>{{ order.user.email if order.user else '-' }}</td>
-                        <td>₹{{ order.total_amount }}</td>
+                        <td><strong style="color:var(--olive-main);">₹{{ "%.2f"|format(order.total_amount|float) }}</strong></td>
                         <td>
-                            <span class="status-badge">
+                            <span style="background:{% if order.payment_method == 'COD' %}#fff3cd;color:#856404{% else %}#d4edda;color:#155724{% endif %};padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600;">
+                                {{ order.payment_method or 'COD' }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge {% if order.status == 'DELIVERED' %}delivered{% elif order.status in ['NOT DELIVERED','CANCELLED'] %}cancelled{% else %}pending{% endif %}">
                                 {{ order.status }}
                             </span>
                         </td>
-                        <td>{{ order.booking_datetime }}</td>
+                        <td style="white-space:nowrap;">{{ order.booking_datetime.strftime('%d %b %Y') if order.booking_datetime else '—' }}</td>
+                        <td>
+                            <a href="/order/invoice/{{ order.id }}" target="_blank" class="btn-outline btn-sm"
+                               style="font-size:11px;gap:4px;white-space:nowrap;">
+                                <i class="fas fa-file-invoice"></i> View
+                            </a>
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="7" style="text-align:center;">
+                        <td colspan="10" style="text-align:center;padding:30px;color:var(--text-muted);">
                             No billing records found
                         </td>
                     </tr>
@@ -60,4 +113,9 @@
     </div>
 </section>
 
+<style>
+.status-badge.delivered { background:#d4edda;color:#155724; }
+.status-badge.cancelled { background:#f8d7da;color:#721c24; }
+.status-badge.pending { background:#fff3cd;color:#856404; }
+</style>
 {% endblock %}

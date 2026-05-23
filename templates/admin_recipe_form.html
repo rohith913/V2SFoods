@@ -14,112 +14,107 @@
     <form method="POST" enctype="multipart/form-data"
           action="{% if recipe %}/admin/recipes/edit/{{ recipe.id }}{% else %}/admin/recipes/add{% endif %}">
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div style="background:white;border-radius:20px;border:1px solid var(--border);padding:28px;margin-bottom:20px;">
+        <h3 style="margin:0 0 20px;color:var(--olive-dark);font-size:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">Basic Details</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
 
-        <!-- Title -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Recipe Title *</label>
-          <input type="text" name="title" value="{{ recipe.title if recipe else '' }}" required
-                 placeholder="e.g. Ragi Malt Porridge" class="form-control">
-        </div>
-
-        <!-- Emoji & Difficulty -->
-        <div class="form-group">
-          <label>Emoji</label>
-          <input type="text" name="emoji" value="{{ recipe.emoji if recipe else '🍲' }}" class="form-control" placeholder="🍲">
-        </div>
-        <div class="form-group">
-          <label>Difficulty</label>
-          <select name="difficulty" class="form-control">
-            {% for d in ['Very Easy','Easy','Medium','Hard'] %}
-            <option value="{{ d }}" {% if recipe and recipe.difficulty == d %}selected{% endif %}>{{ d }}</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <!-- Category & Time -->
-        <div class="form-group">
-          <label>Category</label>
-          <input type="text" name="category" value="{{ recipe.category if recipe else '' }}" class="form-control"
-                 placeholder="e.g. Millet · Breakfast">
-        </div>
-        <div class="form-group">
-          <label>Time (e.g. 20 minutes)</label>
-          <input type="text" name="time_minutes" value="{{ recipe.time_minutes if recipe else '' }}" class="form-control"
-                 placeholder="20 minutes">
-        </div>
-
-        <!-- Servings & Status -->
-        <div class="form-group">
-          <label>Servings</label>
-          <input type="text" name="servings" value="{{ recipe.servings if recipe else '' }}" class="form-control"
-                 placeholder="2 servings">
-        </div>
-        <div class="form-group">
-          <label>Status</label>
-          <select name="status" class="form-control">
-            <option value="ACTIVE" {% if not recipe or recipe.status == 'ACTIVE' %}selected{% endif %}>Active</option>
-            <option value="INACTIVE" {% if recipe and recipe.status == 'INACTIVE' %}selected{% endif %}>Inactive</option>
-          </select>
-        </div>
-
-        <!-- Description -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Short Description</label>
-          <input type="text" name="description" value="{{ recipe.description if recipe else '' }}" class="form-control"
-                 placeholder="A brief one-line description of the recipe">
-        </div>
-
-        <!-- About -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>About / Story</label>
-          <textarea name="about" class="form-control" rows="3"
-                    placeholder="A longer paragraph about the recipe's background">{{ recipe.about if recipe else '' }}</textarea>
-        </div>
-
-        <!-- Recipe Image -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Recipe Image</label>
-          {% if recipe and recipe.image_url %}
-          <div style="margin-bottom:10px;">
-            <img src="{{ recipe.image_url }}" alt="Current" style="height:80px;border-radius:8px;object-fit:cover;">
-            <small style="display:block;color:var(--text-muted);margin-top:4px;">Current image – upload new to replace</small>
+          <div class="fg" style="grid-column:1/-1;">
+            <label>Recipe Title *</label>
+            <input type="text" name="title" value="{{ recipe.title if recipe else '' }}" required
+                   placeholder="e.g. Ragi Malt Porridge" class="fc">
           </div>
-          {% endif %}
-          <input type="file" name="image_file" accept="image/*" class="form-control">
+
+          <div class="fg">
+            <label>Difficulty</label>
+            <select name="difficulty" class="fc">
+              {% for d in ['Very Easy','Easy','Medium','Hard'] %}
+              <option value="{{ d }}" {% if recipe and recipe.difficulty == d %}selected{% endif %}>{{ d }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="fg">
+            <label>Category</label>
+            <input type="text" name="category" value="{{ recipe.category if recipe else '' }}" class="fc"
+                   placeholder="e.g. Millet · Breakfast">
+          </div>
+
+          <div class="fg">
+            <label>Time (e.g. 20 minutes)</label>
+            <input type="text" name="time_minutes" value="{{ recipe.time_minutes if recipe else '' }}" class="fc"
+                   placeholder="20 minutes">
+          </div>
+
+          <div class="fg">
+            <label>Servings</label>
+            <input type="text" name="servings" value="{{ recipe.servings if recipe else '' }}" class="fc"
+                   placeholder="2 servings">
+          </div>
+
+          <div class="fg">
+            <label>Status</label>
+            <select name="status" class="fc">
+              <option value="ACTIVE" {% if not recipe or recipe.status == 'ACTIVE' %}selected{% endif %}>Active</option>
+              <option value="INACTIVE" {% if recipe and recipe.status == 'INACTIVE' %}selected{% endif %}>Inactive</option>
+            </select>
+          </div>
+
+          <div class="fg" style="grid-column:1/-1;">
+            <label>Short Description</label>
+            <input type="text" name="description" value="{{ recipe.description if recipe else '' }}" class="fc"
+                   placeholder="A brief one-line description of the recipe">
+          </div>
+
+          <div class="fg" style="grid-column:1/-1;">
+            <label>About / Story</label>
+            <textarea name="about" class="fc" rows="3"
+                      placeholder="A longer paragraph about the recipe's background and history">{{ recipe.about if recipe else '' }}</textarea>
+          </div>
+
+          <div class="fg" style="grid-column:1/-1;">
+            <label>Recipe Image</label>
+            {% if recipe and recipe.image_url %}
+            <div style="margin-bottom:10px;">
+              <img src="{{ recipe.image_url }}" alt="Current" style="height:100px;border-radius:10px;object-fit:cover;">
+              <small style="display:block;color:var(--text-muted);margin-top:4px;">Current image – upload new to replace</small>
+            </div>
+            {% endif %}
+            <input type="file" name="image_file" accept="image/*" class="fc">
+          </div>
         </div>
+      </div>
 
-        <!-- Ingredients -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Ingredients <small style="color:var(--text-muted);font-weight:400;">(one per line)</small></label>
-          <textarea name="ingredients_text" class="form-control" rows="6"
-                    placeholder="4 tbsp V2S Ragi Health Mix&#10;500 ml milk&#10;2 tbsp jaggery">{{ recipe.ingredients_text if recipe else '' }}</textarea>
+      <div style="background:white;border-radius:20px;border:1px solid var(--border);padding:28px;margin-bottom:20px;">
+        <h3 style="margin:0 0 20px;color:var(--olive-dark);font-size:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">Recipe Content</h3>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <div class="fg">
+            <label>Ingredients <small style="color:var(--text-muted);font-weight:400;text-transform:none;">(one per line)</small></label>
+            <textarea name="ingredients_text" class="fc" rows="7"
+                      placeholder="4 tbsp V2S Ragi Health Mix&#10;500 ml milk&#10;2 tbsp jaggery powder">{{ recipe.ingredients_text if recipe else '' }}</textarea>
+          </div>
+
+          <div class="fg">
+            <label>Cooking Steps <small style="color:var(--text-muted);font-weight:400;text-transform:none;">(one step per line)</small></label>
+            <textarea name="steps_text" class="fc" rows="7"
+                      placeholder="Mix the ragi with cold milk until smooth.&#10;Heat the remaining milk in a saucepan.&#10;Pour ragi paste into warm milk stirring continuously.">{{ recipe.steps_text if recipe else '' }}</textarea>
+          </div>
+
+          <div class="fg">
+            <label>Tips <small style="color:var(--text-muted);font-weight:400;text-transform:none;">(one tip per line, optional)</small></label>
+            <textarea name="tips_text" class="fc" rows="4"
+                      placeholder="Always mix ragi with cold liquid first to prevent lumps.&#10;Add honey instead of jaggery for a different flavour.">{{ recipe.tips_text if recipe else '' }}</textarea>
+          </div>
+
         </div>
+      </div>
 
-        <!-- Steps -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Cooking Steps <small style="color:var(--text-muted);font-weight:400;">(one step per line)</small></label>
-          <textarea name="steps_text" class="form-control" rows="6"
-                    placeholder="Mix the ragi with cold milk until smooth.&#10;Heat the remaining milk in a saucepan.">{{ recipe.steps_text if recipe else '' }}</textarea>
-        </div>
+      <!-- hidden nutrition so the router doesn't break -->
+      <input type="hidden" name="nutrition_text" value="{{ recipe.nutrition_text if recipe else '' }}">
+      <!-- hidden emoji -->
+      <input type="hidden" name="emoji" value="{{ recipe.emoji if recipe else '🍲' }}">
 
-        <!-- Tips -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Tips <small style="color:var(--text-muted);font-weight:400;">(one tip per line)</small></label>
-          <textarea name="tips_text" class="form-control" rows="4"
-                    placeholder="Always mix ragi with cold liquid first to prevent lumps.">{{ recipe.tips_text if recipe else '' }}</textarea>
-        </div>
-
-        <!-- Nutrition -->
-        <div class="form-group" style="grid-column:1/-1;">
-          <label>Nutrition <small style="color:var(--text-muted);font-weight:400;">(format: Key: Value, one per line)</small></label>
-          <textarea name="nutrition_text" class="form-control" rows="5"
-                    placeholder="Calories: 210 kcal&#10;Protein: 8 g&#10;Carbs: 34 g&#10;Fibre: 4 g">{{ recipe.nutrition_text if recipe else '' }}</textarea>
-        </div>
-
-      </div><!-- /grid -->
-
-      <div style="display:flex;gap:12px;margin-top:24px;">
+      <div style="display:flex;gap:12px;margin-top:4px;">
         <button type="submit" class="btn-primary">
           <i class="fas fa-save"></i>
           {% if recipe %}Update Recipe{% else %}Save Recipe{% endif %}
@@ -132,13 +127,10 @@
 </section>
 
 <style>
-.form-group { display:flex;flex-direction:column;gap:6px; }
-.form-group label { font-weight:600;font-size:13px;color:var(--text-dark); }
-.form-control {
-  padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;
-  font-size:14px;font-family:inherit;background:#fafafa;transition:border 0.2s;
-}
-.form-control:focus { outline:none;border-color:var(--olive-main);background:white; }
-textarea.form-control { resize:vertical; }
+.fg { display:flex;flex-direction:column;gap:6px; }
+.fg label { font-size:12px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:0.4px; }
+.fc { padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fafafa;transition:border 0.2s;width:100%;box-sizing:border-box; }
+.fc:focus { outline:none;border-color:var(--olive-main);background:white; }
+textarea.fc { resize:vertical; }
 </style>
 {% endblock %}

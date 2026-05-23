@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-section">
+  <div class="container" style="max-width:900px;">
+
+    <div class="section-head">
+      <div>
+        <small>Admin Panel</small>
+        <h2>Edit Item</h2>
+      </div>
+      <a href="/admin/item-master" class="btn-outline"><i class="fas fa-arrow-left"></i> Back to Items</a>
+    </div>
+
+    {% if error %}
+    <div style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;padding:12px 16px;border-radius:10px;margin-bottom:20px;">
+      <i class="fas fa-exclamation-circle"></i> {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/admin/item-master/edit/{{ item.id }}" enctype="multipart/form-data">
+      <div style="background:white;border-radius:20px;border:1px solid var(--border);padding:28px;margin-bottom:20px;">
+        <h3 style="margin:0 0 20px;color:var(--olive-dark);font-size:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">Basic Details</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="fg">
+            <label>Item Code *</label>
+            <input type="text" name="item_code" value="{{ item.item_code }}" required class="fc">
+          </div>
+          <div class="fg">
+            <label>Item Name *</label>
+            <input type="text" name="item_name" value="{{ item.item_name }}" required class="fc">
+          </div>
+          <div class="fg">
+            <label>Category</label>
+            <input type="text" name="category" value="{{ item.category or '' }}" class="fc">
+          </div>
+          <div class="fg">
+            <label>Price (₹) *</label>
+            <input type="number" step="0.01" name="price" value="{{ item.price }}" required class="fc">
+          </div>
+          <div class="fg">
+            <label>Stock Qty *</label>
+            <input type="number" name="stock_qty" value="{{ item.stock_qty }}" required class="fc">
+          </div>
+          <div class="fg">
+            <label>Status</label>
+            <select name="status" class="fc">
+              <option value="ACTIVE" {% if item.status == 'ACTIVE' %}selected{% endif %}>ACTIVE</option>
+              <option value="INACTIVE" {% if item.status == 'INACTIVE' %}selected{% endif %}>INACTIVE</option>
+            </select>
+          </div>
+          <div class="fg" style="grid-column:1/-1;">
+            <label>Description</label>
+            <textarea name="description" class="fc" rows="2">{{ item.description or '' }}</textarea>
+          </div>
+          <div class="fg" style="grid-column:1/-1;">
+            <label>Ingredients</label>
+            <textarea name="ingredients" class="fc" rows="3">{{ item.ingredients or '' }}</textarea>
+          </div>
+          <div class="fg" style="grid-column:1/-1;">
+            <label>How to Use</label>
+            <textarea name="how_to_use" class="fc" rows="3">{{ item.how_to_use or '' }}</textarea>
+          </div>
+          <div class="fg" style="grid-column:1/-1;">
+            <label>Specifications</label>
+            <textarea name="specifications" class="fc" rows="2">{{ item.specifications or '' }}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:white;border-radius:20px;border:1px solid var(--border);padding:28px;margin-bottom:20px;">
+        <h3 style="margin:0 0 20px;color:var(--olive-dark);font-size:16px;border-bottom:1px solid var(--border);padding-bottom:12px;">Images</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+          {% set imgs = [('main_image', 'Main Image', item.main_image), ('image_1','Image 1',item.image_1), ('image_2','Image 2',item.image_2), ('image_3','Image 3',item.image_3), ('image_4','Image 4',item.image_4), ('image_5','Image 5',item.image_5)] %}
+          {% for fname, flabel, fval in imgs %}
+          <div class="fg">
+            <label>{{ flabel }}</label>
+            {% if fval %}
+            <img src="{{ fval }}" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:6px;">
+            <small style="color:var(--text-muted);display:block;margin-bottom:4px;">Upload new to replace</small>
+            {% endif %}
+            <input type="file" name="{{ fname }}" accept="image/*" class="fc">
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="fg" style="margin-top:16px;">
+          <label>Product Video (Max 10 MB)</label>
+          {% if item.video_url %}
+          <small style="color:var(--text-muted);display:block;margin-bottom:4px;">Current: {{ item.video_url }}</small>
+          {% endif %}
+          <input type="file" name="video_file" accept="video/*" class="fc">
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;">
+        <button type="submit" class="btn-primary"><i class="fas fa-save"></i> Update Item</button>
+        <a href="/admin/item-master" class="btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+.fg { display:flex;flex-direction:column;gap:6px; }
+.fg label { font-size:12px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:0.4px; }
+.fc { padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;background:#fafafa;transition:border 0.2s;width:100%;box-sizing:border-box; }
+.fc:focus { outline:none;border-color:var(--olive-main);background:white; }
+textarea.fc { resize:vertical; }
+</style>
+{% endblock %}
