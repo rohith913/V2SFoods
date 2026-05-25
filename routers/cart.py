@@ -52,12 +52,17 @@ def cart_page(request: Request, db: Session = Depends(get_db)):
 def add_to_cart(
     item_id: int,
     request: Request,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    kg: float = 0.5
 ):
     if not request.session.get("user_id"):
         return redirect_to_user_login(request)
 
     user_id = request.session.get("user_id")
+
+    # Clamp kg to valid values
+    if kg not in [0.5, 1.0]:
+        kg = 0.5
 
     item = db.query(ItemMaster).filter(
         ItemMaster.id == item_id,
@@ -74,12 +79,13 @@ def add_to_cart(
 
     if existing:
         existing.qty = (existing.qty or 1) + 1
+        existing.selected_kg = Decimal(str(kg))
     else:
         cart = CartMaster(
             user_id=user_id,
             item_id=item_id,
             qty=1,
-            selected_kg=Decimal("0.5")
+            selected_kg=Decimal(str(kg))
         )
         db.add(cart)
 

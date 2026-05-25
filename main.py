@@ -34,7 +34,9 @@ app.include_router(recipe_router.router)
 
 
 @app.get("/")
-def home():
+def home(request: Request):
+    if request.session.get("admin_id"):
+        return RedirectResponse("/admin/dashboard", status_code=302)
     return RedirectResponse("/products", status_code=302)
 
 

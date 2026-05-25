@@ -318,6 +318,18 @@
         clickedButton.classList.add("active");
     }
 
+    function selectWeight(itemId, kg, pricePerKg, btn) {
+        // Update price display
+        const price = Math.round(pricePerKg * kg);
+        document.getElementById('modalPrice' + itemId).textContent = '₹' + price;
+        // Update cart link
+        document.getElementById('cartBtn' + itemId).href = '/cart/add/' + itemId + '?kg=' + kg;
+        // Update button states
+        const opts = document.getElementById('weightOpts' + itemId);
+        opts.querySelectorAll('.weight-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
     window.addEventListener("click", function (event) {
         const modals = document.querySelectorAll(".product-detail-overlay");
 

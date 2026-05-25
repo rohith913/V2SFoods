@@ -60,7 +60,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>S.No</th>
+                        <th>#</th>
                         <th>Order No</th>
                         <th>Invoice No</th>
                         <th>User Name</th>
@@ -69,7 +69,7 @@
                         <th>Payment</th>
                         <th>Status</th>
                         <th>Booking Date</th>
-                        <th>Invoice</th>
+                        <th class="billing-invoice-col">Invoice</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,24 +77,26 @@
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td><strong>{{ order.order_no }}</strong></td>
-                        <td style="color:var(--olive-dark);font-weight:600;">{{ order.invoice_no or '—' }}</td>
+                        <td><span class="inv-no-text">{{ order.invoice_no or '—' }}</span></td>
                         <td>{{ order.user.username if order.user else '-' }}</td>
                         <td>{{ order.user.email if order.user else '-' }}</td>
                         <td><strong style="color:var(--olive-main);">₹{{ "%.2f"|format(order.total_amount|float) }}</strong></td>
                         <td>
-                            <span style="background:{% if order.payment_method == 'COD' %}#fff3cd;color:#856404{% else %}#d4edda;color:#155724{% endif %};padding:3px 10px;border-radius:10px;font-size:12px;font-weight:600;">
+                            <span class="tag-pill {% if order.payment_method == 'COD' %}tag-cod{% else %}tag-online{% endif %}">
                                 {{ order.payment_method or 'COD' }}
                             </span>
                         </td>
                         <td>
-                            <span class="status-badge {% if order.status == 'DELIVERED' %}delivered{% elif order.status in ['NOT DELIVERED','CANCELLED'] %}cancelled{% else %}pending{% endif %}">
+                            <span class="status-badge
+                                {% if order.status == 'DELIVERED' %}badge-active
+                                {% elif order.status in ['NOT DELIVERED','CANCELLED'] %}badge-inactive
+                                {% else %}badge-pending{% endif %}">
                                 {{ order.status }}
                             </span>
                         </td>
                         <td style="white-space:nowrap;">{{ order.booking_datetime.strftime('%d %b %Y') if order.booking_datetime else '—' }}</td>
-                        <td>
-                            <a href="/order/invoice/{{ order.id }}" target="_blank" class="btn-outline btn-sm"
-                               style="font-size:11px;gap:4px;white-space:nowrap;">
+                        <td class="billing-invoice-col">
+                            <a href="/order/invoice/{{ order.id }}" target="_blank" class="btn-outline btn-sm">
                                 <i class="fas fa-file-invoice"></i> View
                             </a>
                         </td>
@@ -113,9 +115,4 @@
     </div>
 </section>
 
-<style>
-.status-badge.delivered { background:#d4edda;color:#155724; }
-.status-badge.cancelled { background:#f8d7da;color:#721c24; }
-.status-badge.pending { background:#fff3cd;color:#856404; }
-</style>
 {% endblock %}

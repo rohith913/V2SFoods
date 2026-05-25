@@ -2982,3 +2982,231 @@ td small {
         gap: 6px;
     }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   EXTENDED STYLES – v2 updates
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Status badges ─────────────────────────────────────────── */
+.badge-active   { background: #d4edda; color: #155724; }
+.badge-inactive { background: #f8d7da; color: #721c24; }
+.badge-pending  { background: #fff3cd; color: #856404; }
+.tag-pill {
+    background: var(--olive-light);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--olive-dark);
+    font-weight: 600;
+    white-space: nowrap;
+}
+.btn-danger { color: #e74c3c !important; border-color: #e74c3c !important; }
+
+/* ── Order count badge ─────────────────────────────────────── */
+.order-count-badge {
+    background: var(--olive-light);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--olive-dark);
+}
+
+/* ── Order meta lines ──────────────────────────────────────── */
+.order-meta-line {
+    margin: 4px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Order info grid (customer / address) ──────────────────── */
+.order-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.order-info-box {
+    background: var(--olive-soft);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+}
+.info-box-label {
+    color: var(--olive-main);
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.info-box-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+.info-box-row i { color: var(--olive-main); width: 16px; flex-shrink: 0; }
+
+/* ── Status action buttons ─────────────────────────────────── */
+.status-btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.btn-status {
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1.5px solid;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.btn-status-outline {
+    background: white;
+    color: var(--text-muted);
+    border-color: var(--border);
+}
+.btn-status-outline:hover { border-color: var(--olive-main); color: var(--olive-main); }
+.btn-status-active-green {
+    background: #d4edda;
+    color: #155724;
+    border-color: #a3cfbb;
+}
+.btn-status-active-red {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #f1aeb5;
+}
+
+/* ── Order total check row ─────────────────────────────────── */
+.order-total-check {
+    text-align: right;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* ── Price per kg in product cards ─────────────────────────── */
+.price-per-kg {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+}
+.price-alt {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ── Weight selector (product modal) ──────────────────────── */
+.weight-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+}
+.weight-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    white-space: nowrap;
+}
+.weight-options { display: flex; gap: 8px; }
+.weight-btn {
+    padding: 7px 18px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: all 0.2s;
+}
+.weight-btn:hover { border-color: var(--olive-main); color: var(--olive-main); }
+.weight-btn.active {
+    background: var(--olive-main);
+    border-color: var(--olive-main);
+    color: white;
+}
+
+/* ── Billing summary invoice column fix ─────────────────────── */
+.billing-invoice-col {
+    white-space: nowrap;
+    text-align: center;
+}
+.inv-no-text {
+    font-weight: 700;
+    color: var(--olive-dark);
+    font-size: 13px;
+    display: block;
+    width: 80%;
+}
+
+/* ── Admin form helpers ─────────────────────────────────────── */
+.fg { display: flex; flex-direction: column; gap: 6px; }
+.fg label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.fc {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fafafa;
+    transition: border 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+.fc:focus { outline: none; border-color: var(--olive-main); background: white; }
+textarea.fc { resize: vertical; }
+
+@media (max-width: 700px) {
+    .order-info-grid { grid-template-columns: 1fr; }
+    .status-btn-group { justify-content: flex-start; }
+}
+
+.tag-cod    { background: #fff3cd !important; color: #856404 !important; }
+.tag-online { background: #d4edda !important; color: #155724 !important; }
+
+/* ── Status badge variants (shared) ──────────────────────── */
+.status-badge.delivered,
+.status-badge.paid     { background: #d4edda; color: #155724; }
+.status-badge.cancelled { background: #f8d7da; color: #721c24; }
+.status-badge.pending  { background: #fff3cd; color: #856404; }
+.active-badge          { background: #d4edda; color: #155724; }
+.inactive-badge        { background: #f8d7da; color: #721c24; }
+
+/* ── Star rating ─────────────────────────────────────────── */
+.star-rating .star { font-size: 28px; color: #ddd; cursor: pointer; transition: color 0.15s; }
+.star-rating .star.active,
+.star-rating .star:hover { color: #f0a500; }
+
+/* ── Recipe detail responsive ────────────────────────────── */
+@media (max-width: 800px) {
+    .recipe-detail-grid  { grid-template-columns: 1fr !important; }
+    .comment-form-grid   { grid-template-columns: 1fr !important; }
+}
