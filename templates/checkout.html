@@ -162,12 +162,22 @@
           </div>
 
           <!-- Place Order Button -->
-          <button type="submit" class="btn-primary" style="width:100%;font-size:18px;padding:16px;" id="placeOrderBtn">
+          <div class="button-wrapper">
+
+    <div class="dog-wrapper" id="dogWrapper">
+        <img src="/static/images/dog-scooter1.png"
+             class="dog"
+             alt="Delivery Dog">
+    </div>
+
+          <!-- Button -->
+          <button type="button" class="btn-primary" style="width:100%;font-size:18px;padding:16px;" id="placeOrderBtn" onclick="placeOrder()">
             <i class="fas fa-check-circle"></i> Place Order Securely
           </button>
           <p style="text-align:center;color:var(--text-muted);font-size:13px;margin-top:12px;">
             <i class="fas fa-lock" style="color:var(--olive-main);"></i> Your information is 100% secure and encrypted
           </p>
+        </div>
         </div>
 
         <!-- RIGHT: Order Summary -->
