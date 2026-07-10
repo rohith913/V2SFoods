@@ -134,7 +134,7 @@ async def place_order(request: Request, db: Session = Depends(get_db)):
         "invoice_no": invoice_no,
         "total_amount": float(total_amount),
         "payment_method": payment_method.upper().replace("_", " "),
-    })    
+    })
 
 
 @router.get("/booking")
