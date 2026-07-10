@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel="stylesheet" href="/static/css/package.css">
 <div class="success-page">
   <div class="success-card">
-    <div class="success-icon">✅</div>
-    <h2>Order Placed Successfully!</h2>
+    <div class="delivery-animation">
+
+      <!-- Dog -->
+      <img src="/static/images/dog.png" class="dog">
+
+      <!-- Item -->
+      <img src="/static/images/dog.png" class="item">
+
+      <!-- Box -->
+      <div class="box">
+        <div class="lid"></div>
+      </div>
+
+    </div>
+    <div class="success-text">Order Packed Successfully 🎉</div>
     <p>Thank you for shopping with V2S Foods. Your order has been received and is being processed.</p>
     <div class="order-no-badge">{{ order_no }}</div>
 
