@@ -2532,7 +2532,7 @@ td small {
 }
 
 .footer-top {
-    padding: 70px 0 50px;
+    padding: 10px 0 10px;
 }
 
 .footer-logo {
@@ -3157,8 +3157,8 @@ td small {
     font-weight: 700;
     color: var(--olive-dark);
     font-size: 13px;
-    display: block;
-    width: 80%;
+    white-space: nowrap;   
+    display: inline-block;
 }
 
 /* ── Admin form helpers ─────────────────────────────────────── */

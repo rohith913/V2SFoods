@@ -60,10 +60,10 @@
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <!-- <th>#</th> -->
+                         <th>Invoice No</th>
                         <th>Order No</th>
-                        <th>Invoice No</th>
-                        <th>User Name</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Total Amount</th>
                         <th>Payment</th>
@@ -75,11 +75,11 @@
                 <tbody>
                     {% for order in orders %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <!-- <td>{{ loop.index }}</td> -->
+                        <td><span class="inv-no-text">{{ order.invoice_no}}</span></td>
                         <td><strong>{{ order.order_no }}</strong></td>
-                        <td><span class="inv-no-text">{{ order.invoice_no or '—' }}</span></td>
-                        <td>{{ order.user.username if order.user else '-' }}</td>
-                        <td>{{ order.user.email if order.user else '-' }}</td>
+                        <td>{{ order.user.username}}</td>
+                        <td>{{ order.user.email}}<br>{{order.user.mobile}}</td>
                         <td><strong style="color:var(--olive-main);">₹{{ "%.2f"|format(order.total_amount|float) }}</strong></td>
                         <td>
                             <span class="tag-pill {% if order.payment_method == 'COD' %}tag-cod{% else %}tag-online{% endif %}">

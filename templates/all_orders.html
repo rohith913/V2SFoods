@@ -52,7 +52,6 @@
           </a>
 
           <!-- STATUS TOGGLE -->
-          <!-- STATUS TOGGLE -->
           <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;justify-content:flex-end;">
 
             <!-- DELIVERED -->
@@ -86,10 +85,9 @@
                     background:#e74c3c;
                     border:1px solid #e74c3c;
                     color:white;
-                  {% endif %}
-                ">
+                  {% endif %}">
 
-                <i class="fas fa-clock"></i> Not Delivered
+                <i class="fas fa-clock"></i> Dispatched
               </button>
             </form>
 
@@ -145,7 +143,7 @@
         <table>
           <thead>
             <tr>
-              <th>#</th>
+              <!-- <th>#</th> -->
               <th>Item Name</th>
               <th>Category</th>
               <th>Weight</th>
@@ -157,7 +155,7 @@
           <tbody>
             {% for detail in order.details %}
             <tr>
-              <td>{{ loop.index }}</td>
+              <!-- <td>{{ loop.index }}</td> -->
               <td>
                 <div style="display:flex;align-items:center;gap:10px;">
                   {% if detail.item and detail.item.main_image %}
